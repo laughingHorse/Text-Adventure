@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emerald Isle Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lusitana:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lusitana', serif;
+            background-color: #e0f2e9; /* Light misty green */
+            color: #1a3a1a; /* Dark forest green */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .game-container {
+            background-color: #f0fff0; /* Honeydew - lighter green for contrast */
+            border: 5px solid #2f522f; /* Darker green border */
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .game-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 2.8rem; /* Increased size */
+            color: #006400; /* Dark Green */
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .story-text {
+            font-size: 1.15rem; /* Increased size */
+            line-height: 1.7;
+            margin-bottom: 25px;
+            min-height: 100px; /* Ensure space for text */
+            text-align: left;
+            padding: 10px;
+            border-left: 3px solid #508250; /* Accent border */
+            background-color: #e6f5e6; /* Very light green for text background */
+            border-radius: 8px;
+        }
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Increased gap */
+        }
+        .choice-button {
+            background-color: #38761d; /* Richer Green */
+            color: #ffffff;
+            border: 2px solid #2a5415; /* Darker border for button */
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .choice-button:hover {
+            background-color: #2e6017; /* Darker green on hover */
+            transform: translateY(-2px);
+        }
+        .choice-button:active {
+            transform: translateY(1px);
+        }
+        .inventory {
+            margin-top: 25px;
+            padding: 12px;
+            background-color: #d4e8d4; /* Slightly darker than main background */
+            border-radius: 8px;
+            border: 1px solid #b0c0b0;
+        }
+        .inventory-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #1a3a1a;
+            margin-bottom: 8px;
+        }
+        .inventory-items {
+            font-style: italic;
+            color: #2f522f;
+        }
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ffc107; /* Amber for warning/info */
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+            font-size: 0.9rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .game-title {
+                font-size: 2.2rem;
+            }
+            .story-text {
+                font-size: 1rem;
+            }
+            .choice-button {
+                font-size: 0.9rem;
+                padding: 10px 15px;
+            }
+            .game-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">Emerald Isle Adventure</h1>
+        <div id="story-text" class="story-text">Loading your adventure...</div>
+        <div id="choices-container" class="choices-container">
+            </div>
+        <div id="inventory" class="inventory" style="display: none;">
+            <div class="inventory-title">Your Satchel:</div>
+            <div id="inventory-items" class="inventory-items">Empty</div>
+        </div>
+    </div>
+
+    <div id="message-box" class="message-box">This is a message!</div>
+
+    <script>
+        // Story data structure
+        // Each key is a scene ID.
+        // 'text' is the descriptive text for the scene.
+        // 'choices' is an array of options for the player.
+        // 'item' (optional) is an item gained in this scene.
+        // 'requires' (optional) is an item needed to see this specific choice.
+        // 'consequence' (optional) is a special outcome like 'gameOver' or 'gameWin'.
+        // 'image' (optional) for future image display.
+        const story = {
+            start: {
+                text: "You awaken in a sun-dappled clearing, the air thick with the scent of pine and damp earth. A narrow, overgrown path winds its way into the ancient woods. To your right, a moss-covered stone hums with a faint energy. What do you do?",
+                choices: [
+                    { text: "Follow the overgrown path", nextScene: "path_woods" },
+                    { text: "Examine the moss-covered stone", nextScene: "humming_stone" }
+                ]
+            },
+            path_woods: {
+                text: "The path twists deeper into the forest. Sunlight struggles to penetrate the dense canopy. You hear a faint rustling in the undergrowth ahead.",
+                choices: [
+                    { text: "Call out", nextScene: "path_call_out" },
+                    { text: "Proceed cautiously", nextScene: "path_cautious" },
+                    { text: "Turn back to the clearing", nextScene: "start" }
+                ]
+            },
+            humming_stone: {
+                text: "As you touch the stone, a tingling warmth spreads up your arm. You feel a strange connection to the ancient magic of this land. You notice a small, almost invisible carving of a shamrock on its surface. You gain a 'Lucky Shamrock'!",
+                item: "Lucky Shamrock",
+                choices: [
+                    { text: "Now, follow the overgrown path", nextScene: "path_woods" }
+                ]
+            },
+            path_call_out: {
+                text: "Your voice echoes, and the rustling stops. A moment later, a grumpy-looking leprechaun, no taller than your knee, steps out. 'Well now, what's all this shoutin' for? Disturbin' an honest man's work!'",
+                choices: [
+                    { text: "Apologize and ask for directions", nextScene: "leprechaun_talk" },
+                    { text: "Demand to know what he's doing", nextScene: "leprechaun_angry" }
+                ]
+            },
+            path_cautious: {
+                text: "You move quietly. Peeking through the leaves, you see a leprechaun meticulously polishing a tiny golden shoe. He hasn't noticed you.",
+                choices: [
+                    { text: "Try to sneak past him", nextScene: "sneak_fail_leprechaun" },
+                    { text: "Announce your presence politely", nextScene: "leprechaun_talk" }
+                ]
+            },
+            leprechaun_talk: {
+                text: "The leprechaun eyes you suspiciously. 'Directions, is it? And what might a big folk like yerself be wantin' in these woods?' He strokes his beard thoughtfully.",
+                choices: [
+                    { text: "Say you're just exploring", nextScene: "leprechaun_explore" },
+                    { text: "Ask if he knows any local legends", nextScene: "leprechaun_legends" },
+                    { text: "Offer him something shiny (if you have it)", nextScene: "leprechaun_gift", requires: "Shiny Pebble" }
+                ]
+            },
+            leprechaun_angry: {
+                text: "'Demand?!' The leprechaun's face turns red. 'I'll demand ye out of me sight!' With a flick of his wrist, you find yourself back in the clearing where you started, feeling a bit dizzy.",
+                choices: [
+                    { text: "Sigh and start again", nextScene: "start" }
+                ]
+            },
+            sneak_fail_leprechaun: {
+                text: "You snap a twig! The leprechaun jumps, startled, and glares. 'Tryin' to sneak up on me, were ye? That's not very friendly!' He looks annoyed.",
+                choices: [
+                    { text: "Apologize quickly", nextScene: "leprechaun_talk" },
+                    { text: "Stand your ground", nextScene: "leprechaun_angry" }
+                ]
+            },
+            leprechaun_explore: {
+                text: "'Just explorin', eh?' He squints. 'Well, be careful. These woods ain't always friendly to outsiders. Stick to the paths, and don't meddle with things that ain't yours.'",
+                choices: [
+                    { text: "Thank him and continue on the path", nextScene: "deep_woods" },
+                    { text: "Ask about the 'unfriendly' parts", nextScene: "leprechaun_warns" }
+                ]
+            },
+            leprechaun_legends: {
+                text: "'Legends?' His eyes twinkle. 'Aye, these woods are full of 'em. Faeries in the glades, ancient curses, hidden treasures... But it's not wise to go lookin' for trouble.'",
+                choices: [
+                    { text: "Ask for a specific tale", nextScene: "leprechaun_tale_fae" },
+                    { text: "Heed his warning and move on", nextScene: "deep_woods" }
+                ]
+            },
+            leprechaun_warns: {
+                text: "'There are... places,' he says, lowering his voice, 'where the veil between worlds is thin. Places where the Sidhe still dance, and mortals are not welcome. Best avoid any unusual lights or music, if ye catch my drift.'",
+                choices: [
+                    { text: "Thank him for the warning", nextScene: "deep_woods" }
+                ]
+            },
+            leprechaun_tale_fae: {
+                text: "'They say there's a faerie ring not far from here,' he whispers, 'where on moonless nights, the music is so enchanting it can lure a mortal to dance until they waste away. Or, if they're lucky and show respect, they might receive a faerie's blessing.' He winks.",
+                choices: [
+                    { text: "Ask if he knows where it is (if you have Lucky Shamrock)", nextScene: "faerie_ring_location_ask", requires: "Lucky Shamrock" },
+                    { text: "Decide it's too risky", nextScene: "deep_woods" }
+                ]
+            },
+            faerie_ring_location_ask: {
+                text: "He notices your shamrock. 'Ah, a bit o' luck on ye, I see! Well, for someone touched by the old magic... follow the stream that whispers, past the weeping willow. But be wary, friend. The Gentry are not to be trifled with.'",
+                choices: [
+                    { text: "Thank him and seek the stream", nextScene: "stream_path" }
+                ]
+            },
+            stream_path: {
+                text: "You find a babbling stream and follow its course. The trees here seem older, their branches like gnarled arms. You pass a large weeping willow, its fronds brushing the ground. Beyond it, you see a faint, ethereal glow.",
+                choices: [
+                    { text: "Approach the glowing area", nextScene: "faerie_ring_approach" },
+                    { text: "This feels too dangerous, turn back", nextScene: "deep_woods" }
+                ]
+            },
+            faerie_ring_approach: {
+                text: "It's a perfect circle of mushrooms, glowing softly. Faint, otherworldly music drifts on the air. You feel a pull, a desire to step inside.",
+                choices: [
+                    { text: "Step into the faerie ring", nextScene: "faerie_ring_enter" },
+                    { text: "Observe from a distance", nextScene: "faerie_ring_observe" },
+                    { text: "Leave a small offering (if you have Lucky Shamrock)", nextScene: "faerie_offering", requires: "Lucky Shamrock"}
+                ]
+            },
+            faerie_ring_enter: {
+                text: "The music swells! Tiny, shimmering figures appear, dancing with impossible grace. They beckon you to join. You dance and dance, losing all track of time. When the music finally fades, you find yourself exhausted but strangely exhilarated. The faeries are gone, but a single, dew-kissed silver bell lies in the center of the ring.",
+                item: "Faerie Bell",
+                choices: [
+                    { text: "Take the bell and continue your journey", nextScene: "deep_woods_after_fae" }
+                ],
+                consequenceText: "The faeries found you amusing and gifted you a token."
+            },
+            faerie_ring_observe: {
+                text: "You watch for a while, mesmerized by the faint lights and music. It's beautiful, but a sense of unease keeps you rooted to the spot. After a time, the glow and music fade, leaving only the silent woods.",
+                choices: [
+                    { text: "Continue your journey", nextScene: "deep_woods" }
+                ]
+            },
+            faerie_offering: {
+                text: "You recall tales of offerings to the Good Folk. You carefully place your Lucky Shamrock at the edge of the ring. The glow intensifies for a moment, and the music seems to hum with approval. Then, it subsides. You feel a sense of peace.",
+                choices: [
+                    { text: "Perhaps you'll be blessed. Continue on.", nextScene: "deep_woods_blessed" }
+                ],
+                removeItem: "Lucky Shamrock", // Item is consumed
+                consequenceText: "The faeries accepted your respectful offering."
+            },
+            deep_woods: {
+                text: "You venture further. The woods are quiet now. You come to a fork in the path. One way leads uphill towards a rocky outcrop, the other descends into a shadowy glen.",
+                choices: [
+                    { text: "Take the uphill path", nextScene: "rocky_outcrop_path" },
+                    { text: "Descend into the shadowy glen", nextScene: "shadowy_glen_path" }
+                ]
+            },
+            deep_woods_blessed: {
+                text: "You venture further, feeling a subtle warmth and luck guiding your steps. The woods are quiet. You come to a fork: uphill to a rocky outcrop, or down into a shadowy glen.",
+                choices: [
+                    { text: "Take the uphill path (feeling lucky)", nextScene: "rocky_outcrop_path_blessed" },
+                    { text: "Descend into the shadowy glen", nextScene: "shadowy_glen_path" }
+                ]
+            },
+            deep_woods_after_fae: {
+                text: "With the Faerie Bell in your satchel, you continue. The woods are quiet. You come to a fork: uphill to a rocky outcrop, or down into a shadowy glen.",
+                choices: [
+                    { text: "Take the uphill path", nextScene: "rocky_outcrop_path" },
+                    { text: "Descend into the shadowy glen", nextScene: "shadowy_glen_path" }
+                ]
+            },
+            rocky_outcrop_path: {
+                text: "The climb is steep. From the top of the outcrop, you see a vast panorama of forest. In the distance, a ruined tower stands silhouetted against the sky. There's also a glint of something near a pile of rocks.",
+                choices: [
+                    { text: "Investigate the glint", nextScene: "glint_rocks" },
+                    { text: "Head towards the ruined tower", nextScene: "tower_approach" },
+                    { text: "Go back down", nextScene: "deep_woods" }
+                ]
+            },
+             rocky_outcrop_path_blessed: {
+                text: "The climb feels easier than it looks. From the top, you survey the forest. A ruined tower catches your eye. Near some rocks, something shiny glints, and you feel drawn to it.",
+                choices: [
+                    { text: "Investigate the glint (your luck guides you!)", nextScene: "glint_rocks_lucky" },
+                    { text: "Head towards the ruined tower", nextScene: "tower_approach" },
+                    { text: "Go back down", nextScene: "deep_woods_blessed" }
+                ]
+            },
+            glint_rocks: {
+                text: "You search the rocks but find only a discarded piece of broken glass. Disappointing.",
+                choices: [
+                    { text: "Head towards the ruined tower", nextScene: "tower_approach" },
+                    { text: "Go back down", nextScene: "deep_woods" }
+                ]
+            },
+            glint_rocks_lucky: {
+                text: "Your eyes, guided by a subtle intuition, spot a small, intricately carved wooden bird hidden in a crevice. It feels warm to the touch.",
+                item: "Carved Bird",
+                choices: [
+                    { text: "Admire your find and head for the tower", nextScene: "tower_approach" },
+                    { text: "Go back down", nextScene: "deep_woods_blessed" }
+                ]
+            },
+            shadowy_glen_path: {
+                text: "The air grows colder as you descend. Strange, twisted trees loom, and you hear an unnerving silence. You spot an old, weather-beaten sign with faded writing.",
+                choices: [
+                    { text: "Try to read the sign", nextScene: "read_sign_glen" },
+                    { text: "This place feels wrong. Turn back.", nextScene: "deep_woods" },
+                    { text: "Ring the Faerie Bell (if you have it)", nextScene: "glen_ring_bell", requires: "Faerie Bell" }
+                ]
+            },
+            read_sign_glen: {
+                text: "The sign is barely legible: 'Beware the Pooka's Glen. Turn back, traveler.' A shiver runs down your spine.",
+                choices: [
+                    { text: "Ignore the warning and proceed", nextScene: "pooka_encounter_unprepared" },
+                    { text: "Heed the warning and turn back", nextScene: "deep_woods" }
+                ]
+            },
+            glen_ring_bell: {
+                text: "You ring the Faerie Bell. Its clear tone cuts through the oppressive silence. For a moment, the shadows seem to recoil. The path ahead looks slightly less menacing.",
+                choices: [
+                    { text: "Proceed into the glen with the bell's protection", nextScene: "pooka_encounter_prepared" }
+                ],
+                consequenceText: "The Faerie Bell's sound offers some protection."
+            },
+            pooka_encounter_unprepared: {
+                text: "A shadowy form detaches itself from a twisted tree – a Pooka, a mischievous and sometimes malevolent spirit. Its eyes glow red. 'You were warned,' it hisses, and a wave of fear washes over you. You black out.",
+                consequence: "gameOver",
+                consequenceText: "The Pooka's magic overwhelms you. Your adventure ends here."
+            },
+            pooka_encounter_prepared: {
+                text: "A Pooka emerges, but the bell's resonance seems to keep it at bay. 'Curious,' it rasps, its red eyes narrowed. 'You carry a light not often seen here. Pass, mortal, but do not linger.' It fades back into the shadows.",
+                choices: [
+                    { text: "Quickly pass through the glen", nextScene: "glen_exit" }
+                ]
+            },
+            glen_exit: {
+                text: "You hurry through the 
