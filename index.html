@@ -32,31 +32,31 @@
         }
         .game-title {
             font-family: 'MedievalSharp', cursive;
-            font-size: 2.8rem; /* Increased size */
-            color: #006400; /* Dark Green */
+            font-size: 2.8rem;
+            color: #006400;
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
         .story-text {
-            font-size: 1.15rem; /* Increased size */
+            font-size: 1.15rem;
             line-height: 1.7;
             margin-bottom: 25px;
-            min-height: 100px; /* Ensure space for text */
+            min-height: 100px;
             text-align: left;
             padding: 10px;
-            border-left: 3px solid #508250; /* Accent border */
-            background-color: #e6f5e6; /* Very light green for text background */
+            border-left: 3px solid #508250;
+            background-color: #e6f5e6;
             border-radius: 8px;
         }
         .choices-container {
             display: flex;
             flex-direction: column;
-            gap: 12px; /* Increased gap */
+            gap: 12px;
         }
         .choice-button {
-            background-color: #38761d; /* Richer Green */
+            background-color: #38761d;
             color: #ffffff;
-            border: 2px solid #2a5415; /* Darker border for button */
+            border: 2px solid #2a5415;
             padding: 12px 20px;
             border-radius: 8px;
             font-size: 1rem;
@@ -65,7 +65,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .choice-button:hover {
-            background-color: #2e6017; /* Darker green on hover */
+            background-color: #2e6017;
             transform: translateY(-2px);
         }
         .choice-button:active {
@@ -74,7 +74,7 @@
         .inventory {
             margin-top: 25px;
             padding: 12px;
-            background-color: #d4e8d4; /* Slightly darker than main background */
+            background-color: #d4e8d4;
             border-radius: 8px;
             border: 1px solid #b0c0b0;
         }
@@ -93,31 +93,20 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #ffc107; /* Amber for warning/info */
+            background-color: #ffc107;
             color: #333;
             padding: 10px 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
             z-index: 1000;
-            display: none; /* Hidden by default */
+            display: none;
             font-size: 0.9rem;
         }
-
-        /* Responsive adjustments */
         @media (max-width: 600px) {
-            .game-title {
-                font-size: 2.2rem;
-            }
-            .story-text {
-                font-size: 1rem;
-            }
-            .choice-button {
-                font-size: 0.9rem;
-                padding: 10px 15px;
-            }
-            .game-container {
-                padding: 15px;
-            }
+            .game-title { font-size: 2.2rem; }
+            .story-text { font-size: 1rem; }
+            .choice-button { font-size: 0.9rem; padding: 10px 15px; }
+            .game-container { padding: 15px; }
         }
     </style>
 </head>
@@ -125,25 +114,18 @@
     <div class="game-container">
         <h1 class="game-title">Emerald Isle Adventure</h1>
         <div id="story-text" class="story-text">Loading your adventure...</div>
-        <div id="choices-container" class="choices-container">
-            </div>
+        <div id="choices-container" class="choices-container"></div>
         <div id="inventory" class="inventory" style="display: none;">
             <div class="inventory-title">Your Satchel:</div>
             <div id="inventory-items" class="inventory-items">Empty</div>
         </div>
     </div>
-
     <div id="message-box" class="message-box">This is a message!</div>
 
     <script>
+        console.log("Script execution started."); // First log
+
         // Story data structure
-        // Each key is a scene ID.
-        // 'text' is the descriptive text for the scene.
-        // 'choices' is an array of options for the player.
-        // 'item' (optional) is an item gained in this scene.
-        // 'requires' (optional) is an item needed to see this specific choice.
-        // 'consequence' (optional) is a special outcome like 'gameOver' or 'gameWin'.
-        // 'image' (optional) for future image display.
         const story = {
             start: {
                 text: "You awaken in a sun-dappled clearing, the air thick with the scent of pine and damp earth. A narrow, overgrown path winds its way into the ancient woods. To your right, a moss-covered stone hums with a faint energy. What do you do?",
@@ -186,13 +168,20 @@
                 choices: [
                     { text: "Say you're just exploring", nextScene: "leprechaun_explore" },
                     { text: "Ask if he knows any local legends", nextScene: "leprechaun_legends" },
-                    { text: "Offer him something shiny (if you have it)", nextScene: "leprechaun_gift", requires: "Shiny Pebble" }
+                    { text: "Offer him something shiny (if you have Shiny Pebble)", nextScene: "leprechaun_gift_pebble", requires: "Shiny Pebble" }
+                ]
+            },
+            leprechaun_gift_pebble: {
+                text: "You offer the Shiny Pebble. The leprechaun's eyes light up! 'Well now, that's a fine trinket! For your generosity, I'll tell ye: beware the Whispering Falls if you ain't got a faerie's blessing. But the old tower on the crag? Might hold a secret or two.'",
+                removeItem: "Shiny Pebble",
+                choices: [
+                    { text: "Thank him and continue on the path", nextScene: "deep_woods" },
                 ]
             },
             leprechaun_angry: {
                 text: "'Demand?!' The leprechaun's face turns red. 'I'll demand ye out of me sight!' With a flick of his wrist, you find yourself back in the clearing where you started, feeling a bit dizzy.",
                 choices: [
-                    { text: "Sigh and start again", nextScene: "start" }
+                    { text: "Sigh and start again", nextScene: "start", isRestart: true }
                 ]
             },
             sneak_fail_leprechaun: {
@@ -225,7 +214,7 @@
             leprechaun_tale_fae: {
                 text: "'They say there's a faerie ring not far from here,' he whispers, 'where on moonless nights, the music is so enchanting it can lure a mortal to dance until they waste away. Or, if they're lucky and show respect, they might receive a faerie's blessing.' He winks.",
                 choices: [
-                    { text: "Ask if he knows where it is (if you have Lucky Shamrock)", nextScene: "faerie_ring_location_ask", requires: "Lucky Shamrock" },
+                    { text: "Ask if he knows where it is (Requires Lucky Shamrock)", nextScene: "faerie_ring_location_ask", requires: "Lucky Shamrock" },
                     { text: "Decide it's too risky", nextScene: "deep_woods" }
                 ]
             },
@@ -247,7 +236,7 @@
                 choices: [
                     { text: "Step into the faerie ring", nextScene: "faerie_ring_enter" },
                     { text: "Observe from a distance", nextScene: "faerie_ring_observe" },
-                    { text: "Leave a small offering (if you have Lucky Shamrock)", nextScene: "faerie_offering", requires: "Lucky Shamrock"}
+                    { text: "Leave your Lucky Shamrock as an offering", nextScene: "faerie_offering", requires: "Lucky Shamrock"}
                 ]
             },
             faerie_ring_enter: {
@@ -269,7 +258,7 @@
                 choices: [
                     { text: "Perhaps you'll be blessed. Continue on.", nextScene: "deep_woods_blessed" }
                 ],
-                removeItem: "Lucky Shamrock", // Item is consumed
+                removeItem: "Lucky Shamrock",
                 consequenceText: "The faeries accepted your respectful offering."
             },
             deep_woods: {
@@ -279,7 +268,7 @@
                     { text: "Descend into the shadowy glen", nextScene: "shadowy_glen_path" }
                 ]
             },
-            deep_woods_blessed: {
+             deep_woods_blessed: {
                 text: "You venture further, feeling a subtle warmth and luck guiding your steps. The woods are quiet. You come to a fork: uphill to a rocky outcrop, or down into a shadowy glen.",
                 choices: [
                     { text: "Take the uphill path (feeling lucky)", nextScene: "rocky_outcrop_path_blessed" },
@@ -349,7 +338,10 @@
             pooka_encounter_unprepared: {
                 text: "A shadowy form detaches itself from a twisted tree – a Pooka, a mischievous and sometimes malevolent spirit. Its eyes glow red. 'You were warned,' it hisses, and a wave of fear washes over you. You black out.",
                 consequence: "gameOver",
-                consequenceText: "The Pooka's magic overwhelms you. Your adventure ends here."
+                consequenceText: "The Pooka's magic overwhelms you. Your adventure ends here.",
+                choices: [
+                    { text: "Try again?", nextScene: "start", isRestart: true }
+                ]
             },
             pooka_encounter_prepared: {
                 text: "A Pooka emerges, but the bell's resonance seems to keep it at bay. 'Curious,' it rasps, its red eyes narrowed. 'You carry a light not often seen here. Pass, mortal, but do not linger.' It fades back into the shadows.",
@@ -358,4 +350,285 @@
                 ]
             },
             glen_exit: {
-                text: "You hurry through the 
+                text: "You hurry through the glen, the unsettling feeling slowly receding as you emerge into a sunnier part of the woods. You've made it.",
+                choices: [
+                    { text: "Continue exploring", nextScene: "ancient_ruins_path" }
+                ]
+            },
+            tower_approach: {
+                text: "The ruined tower looms larger. It looks ancient and crumbling, but a faint light flickers in one of the upper windows. The main door is ajar.",
+                choices: [
+                    { text: "Enter the tower", nextScene: "tower_entrance" },
+                    { text: "Circle the tower to look for another way in", nextScene: "tower_circle" },
+                    { text: "Decide it's too dangerous and go back", nextScene: "rocky_outcrop_path" }
+                ]
+            },
+            tower_entrance: {
+                text: "Inside, the tower is dusty and filled with cobwebs. A spiral staircase, partially collapsed, leads upwards. You hear a faint, sorrowful humming from above.",
+                choices: [
+                    { text: "Attempt to climb the stairs", nextScene: "tower_stairs" },
+                    { text: "Search the ground floor", nextScene: "tower_ground_floor" }
+                ]
+            },
+            tower_stairs: {
+                text: "The stairs groan under your weight. Halfway up, a step crumbles! You manage to catch yourself, but the way up is now blocked. You see a small, tarnished silver locket that must have fallen from above.",
+                item: "Tarnished Locket",
+                choices: [
+                    { text: "Climb back down and search the ground floor", nextScene: "tower_ground_floor" },
+                    { text: "Leave the tower", nextScene: "tower_approach" }
+                ]
+            },
+            tower_ground_floor: {
+                text: "Searching the ground floor, you find an old chest. It's locked. If only you had something to pick the lock... or perhaps a key?",
+                choices: [
+                    { text: "Try to open with the Carved Bird (if you have it)", nextScene: "tower_chest_bird", requires: "Carved Bird"},
+                    { text: "Leave the chest and go back outside", nextScene: "tower_approach" },
+                    { text: "Check the stairs again", nextScene: "tower_stairs_check" }
+                ]
+            },
+            tower_stairs_check: {
+                text: "You glance at the stairs. They look too unstable to try again.",
+                choices: [
+                    { text: "Search the ground floor again (or for first time)", nextScene: "tower_ground_floor_check" },
+                    { text: "Leave the tower", nextScene: "tower_approach" }
+                ]
+            },
+            tower_ground_floor_check: {
+                 text: "You've already searched the ground floor thoroughly. The chest remains locked unless you have a way to open it.",
+                 choices: [
+                    { text: "Try to open with the Carved Bird (if you have it)", nextScene: "tower_chest_bird", requires: "Carved Bird"},
+                    { text: "Leave the tower", nextScene: "tower_approach" }
+                ]
+            },
+            tower_chest_bird: {
+                text: "You remember the Carved Bird. Its pointed beak looks like it might just work on the old lock. With a bit of wiggling, the lock clicks open! Inside, you find a map of the region, marking a 'Whispering Waterfall' said to hide a great treasure.",
+                item: "Treasure Map",
+                removeItem: "Carved Bird",
+                choices: [
+                    { text: "Take the map and leave the tower", nextScene: "waterfall_quest_start" }
+                ],
+                consequenceText: "The Carved Bird helped you find a treasure map, but broke in the process!"
+            },
+            waterfall_quest_start: {
+                text: "The map shows the Whispering Waterfall deep within the woods, beyond the Pooka's Glen. This is it, the final leg of your adventure!",
+                choices: [
+                    { text: "Brave the path to the waterfall!", nextScene: "final_path_waterfall" }
+                ]
+            },
+            final_path_waterfall: {
+                text: "Following the map, you navigate treacherous paths and cross rickety bridges. Finally, you hear the roar of water. The Whispering Waterfall cascades into a shimmering pool. Behind the falls, you see the dark opening of a cave.",
+                choices: [
+                    { text: "Enter the cave behind the waterfall", nextScene: "cave_entrance" }
+                ]
+            },
+            cave_entrance: {
+                text: "The cave is damp and echoes with the waterfall's roar. A pedestal stands in the center. Upon it rests a legendary artifact: The Harp of Ages, said to hold the music of the land itself.",
+                choices: [
+                    { text: "Take the Harp of Ages", nextScene: "gameWin" }
+                ]
+            },
+            gameOver: {
+                text: "Your adventure ends here. The mists of the Emerald Isle claim another lost soul...",
+                consequence: "gameOver",
+                choices: [
+                    { text: "Try again?", nextScene: "start", isRestart: true }
+                ]
+            },
+            gameWin: {
+                text: "You hold the Harp of Ages! Its gentle hum resonates with your spirit. You have found one of Ireland's greatest treasures. Your legend will be sung for generations!",
+                consequence: "gameWin",
+                choices: [
+                    { text: "Play Again?", nextScene: "start", isRestart: true }
+                ]
+            },
+            ancient_ruins_path: {
+                text: "You find yourself walking towards what looks like ancient, crumbling ruins. The path is unclear here, and the air feels heavy with untold stories.",
+                choices: [ 
+                    { text: "This path is not yet fully written. Return to start?", nextScene: "start", isRestart: true}
+                ]
+            },
+            tower_circle: {
+                text: "You circle the tower. The walls are sheer and offer no easy handholds or other entrances. The only obvious way in seems to be the main door.",
+                choices: [
+                    { text: "Try the main door", nextScene: "tower_entrance" },
+                    { text: "Give up on the tower for now", nextScene: "rocky_outcrop_path" }
+                ]
+            }
+        }; // End of story object
+
+        // --- Global Game State ---
+        let currentScene = 'start';
+        let inventory = [];
+
+        // --- DOM Element References ---
+        // These will be assigned once the DOM is loaded, inside window.onload
+        let storyTextElement, choicesContainerElement, inventoryElement, inventoryItemsElement, messageBoxElement;
+
+        console.log("Global variables declared.");
+
+        // --- Core Functions ---
+        function showMessage(message, duration = 3000) {
+            if (!messageBoxElement) { // Guard clause
+                console.error("showMessage called before messageBoxElement is initialized.");
+                return;
+            }
+            messageBoxElement.textContent = message;
+            messageBoxElement.style.display = 'block';
+            setTimeout(() => {
+                messageBoxElement.style.display = 'none';
+            }, duration);
+        }
+
+        function updateInventoryDisplay() {
+            if (!inventoryItemsElement || !inventoryElement) { // Guard clause
+                console.error("updateInventoryDisplay called before inventory elements are initialized.");
+                return;
+            }
+            if (inventory.length === 0) {
+                inventoryItemsElement.textContent = "Empty";
+                inventoryElement.style.display = 'none';
+            } else {
+                inventoryItemsElement.textContent = inventory.join(", ");
+                inventoryElement.style.display = 'block';
+            }
+        }
+
+        function renderScene() {
+            console.log(`Attempting to render scene: ${currentScene}`);
+            if (!storyTextElement || !choicesContainerElement) { // Guard clause
+                console.error("renderScene called before essential DOM elements are initialized.");
+                // Check if storyTextElement itself is null before trying to set its innerHTML
+                if (storyTextElement) {
+                    storyTextElement.innerHTML = "Error: Game elements not ready. Please refresh.";
+                } else {
+                    // Fallback if storyTextElement is also null, perhaps alert or log to body
+                     document.body.insertAdjacentHTML('afterbegin', '<div style="color:red; padding: 20px; text-align:center;">Critical Error: Game display area not found.</div>');
+                }
+                return;
+            }
+
+            const scene = story[currentScene];
+
+            if (!scene) {
+                console.error(`Error: Scene ID "${currentScene}" not found in story data. Resetting to start.`);
+                storyTextElement.innerHTML = `Error: Scene "${currentScene}" could not be found. This is a bug! Returning to the start.`;
+                currentScene = 'start';
+                inventory = [];
+                updateInventoryDisplay();
+                setTimeout(() => renderScene(), 0); 
+                return;
+            }
+            console.log("Scene data:", scene);
+
+            storyTextElement.innerHTML = scene.text;
+            choicesContainerElement.innerHTML = "";
+
+            if (scene.item && !inventory.includes(scene.item)) {
+                inventory.push(scene.item);
+                showMessage(`You found: ${scene.item}!`);
+                updateInventoryDisplay();
+            }
+
+            if (scene.removeItem) { 
+                const itemIndex = inventory.indexOf(scene.removeItem);
+                if (itemIndex > -1) {
+                    inventory.splice(itemIndex, 1);
+                    showMessage(`You used your ${scene.removeItem}.`);
+                    updateInventoryDisplay();
+                } else if (scene.removeItem) { 
+                    console.warn(`Attempted to remove item "${scene.removeItem}" but it was not in inventory.`);
+                }
+            }
+
+            if (scene.consequenceText) {
+                 showMessage(scene.consequenceText, 4000);
+            }
+
+            if (scene.choices && scene.choices.length > 0) {
+                scene.choices.forEach(choice => {
+                    if (choice.requires && !inventory.includes(choice.requires)) {
+                        return;
+                    }
+
+                    const button = document.createElement('button');
+                    button.textContent = choice.text;
+                    button.classList.add('choice-button');
+                    
+                    button.onclick = () => {
+                        if (choice.isRestart) {
+                            inventory = [];
+                            updateInventoryDisplay();
+                            showMessage("A new adventure begins!");
+                        }
+                        currentScene = choice.nextScene;
+                        renderScene();
+                    };
+                    choicesContainerElement.appendChild(button);
+                });
+            } else if (!scene.consequence) {
+                console.warn(`Scene "${currentScene}" has no choices and no explicit consequence. Adding a fallback to start.`);
+                const button = document.createElement('button');
+                button.textContent = "Hmm, where to go now? (Return to start)";
+                button.classList.add('choice-button');
+                button.onclick = () => {
+                    currentScene = 'start';
+                    inventory = [];
+                    updateInventoryDisplay();
+                    renderScene();
+                };
+                choicesContainerElement.appendChild(button);
+            }
+        }
+
+        // --- Game Initialization ---
+        window.onload = () => {
+            console.log("window.onload event triggered.");
+
+            storyTextElement = document.getElementById('story-text');
+            choicesContainerElement = document.getElementById('choices-container');
+            inventoryElement = document.getElementById('inventory');
+            inventoryItemsElement = document.getElementById('inventory-items');
+            messageBoxElement = document.getElementById('message-box');
+
+            console.log("DOM elements references initialized:", {
+                storyTextElement: !!storyTextElement,
+                choicesContainerElement: !!choicesContainerElement,
+                inventoryElement: !!inventoryElement,
+                inventoryItemsElement: !!inventoryItemsElement,
+                messageBoxElement: !!messageBoxElement
+            });
+
+            if (!storyTextElement || !choicesContainerElement || !inventoryElement || !inventoryItemsElement || !messageBoxElement) {
+                console.error("One or more critical DOM elements were not found. Game cannot start.");
+                const errorDiv = "<div style='color: red; text-align: center; padding-top: 50px; font-size: 1.2em; font-family: sans-serif;'>A critical error occurred loading the game. Some essential parts of the page are missing. Please ensure the HTML structure is correct (especially elements with IDs like 'story-text', 'choices-container', etc.). Check the browser console (Right-click -> Inspect -> Console) for more details.</div>";
+                // Try to set body, but if even that fails, there's little we can do.
+                if (document.body) {
+                    document.body.innerHTML = errorDiv;
+                } else {
+                    // Fallback if body isn't even available, though highly unlikely for a valid HTML doc
+                    alert("Critical error: Game cannot load. Essential HTML structure missing.");
+                }
+                return; 
+            }
+            
+            console.log("Game loading. Initial scene ID:", currentScene);
+            try {
+                renderScene();
+                updateInventoryDisplay();
+                console.log("Initial scene rendered.");
+            } catch (e) {
+                console.error("Error during initial renderScene or updateInventoryDisplay:", e);
+                if (storyTextElement) { // Check if storyTextElement is available before using it
+                    storyTextElement.innerHTML = `An error occurred while starting the game: ${e.message}. Check the console for more details.`;
+                } else {
+                    // If storyTextElement itself is the problem or not available
+                    document.body.insertAdjacentHTML('beforeend', `<div style='color:red; padding:10px;'>Runtime Error: ${e.message}</div>`);
+                }
+            }
+        };
+        console.log("Script execution finished defining functions and onload handler.");
+    </script>
+</body>
+</html>
+
+            
