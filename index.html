@@ -421,12 +421,7 @@
                     { text: "Enter the cave behind the waterfall", nextScene: "cave_entrance" }
                 ]
             },
-            cave_entrance: {
-                text: "The cave is damp and echoes with the waterfall's roar. A pedestal stands in the center. Upon it rests a legendary artifact: The Harp of Ages, said to hold the music of the land itself.",
-                choices: [
-                    { text: "Take the Harp of Ages", nextScene: "gameWin" }
-                ]
-            },
+
             gameOver: {
                 text: "Your adventure ends here. The mists of the Emerald Isle claim another lost soul...",
                 consequence: "gameOver",
@@ -441,19 +436,1047 @@
                     { text: "Play Again?", nextScene: "start", isRestart: true }
                 ]
             },
-            ancient_ruins_path: {
-                text: "You find yourself walking towards what looks like ancient, crumbling ruins. The path is unclear here, and the air feels heavy with untold stories.",
-                choices: [ 
-                    { text: "This path is not yet fully written. Return to start?", nextScene: "start", isRestart: true}
+             ancient_ruins_path: {
+                text: "You find yourself in a circular clearing dominated by weathered stone pillars. In the center stands what appears to be an altar, ancient Celtic symbols carved into its surface. The air here feels charged with old magic.",
+                choices: [
+                    { text: "Approach the altar", nextScene: "ruins_altar" },
+                    { text: "Examine the stone pillars", nextScene: "ruins_pillars" },
+                    { text: "Look for a path beyond the ruins", nextScene: "ruins_path_beyond" }
+                    ]
+            },
+
+            ruins_altar: {
+                text: "As you near the altar, you notice a shallow basin at its center. The basin is dry, but stained with what might be centuries of offerings. Three symbols are prominently carved around it: a flame, a droplet, and a leaf.",
+                choices: [
+                    { text: "Place the Tarnished Locket on the altar (if you have it)", nextScene: "ruins_locket_offering", requires: "Tarnished Locket" },
+                    { text: "Trace the flame symbol with your finger", nextScene: "ruins_flame_symbol" },
+                    { text: "Trace the water droplet symbol", nextScene: "ruins_water_symbol" },
+                    { text: "Trace the leaf symbol", nextScene: "ruins_leaf_symbol" },
+                    { text: "Step back from the altar", nextScene: "ancient_ruins_path" }
                 ]
             },
+            ruins_locket_offering: {
+                text: "You place the Tarnished Locket in the basin. The moment it touches the stone, the locket springs open, revealing a portrait of a beautiful woman with sad eyes. A soft melody begins to play, and the locket begins to glow with silver light. The basin fills with clear water that doesn't spill over the edges.",
+                removeItem: "Tarnished Locket",
+                item: "Silver Key",
+                choices: [
+                    { text: "Take the Silver Key that has appeared floating in the water", nextScene: "ruins_after_offering" }
+                ],
+                consequenceText: "The locket transformed into a Silver Key!"
+            },
+            ruins_after_offering: {
+                text: "The water in the basin evaporates as you take the Silver Key. The melody fades. One of the stone pillars grinds aside, revealing a hidden passage leading underground.",
+                choices: [
+                    { text: "Enter the hidden passage", nextScene: "druid_underground" },
+                    { text: "Examine the other pillars first", nextScene: "ruins_pillars" }
+                ]
+            },
+            ruins_flame_symbol: {
+                text: "As your finger traces the flame, the symbol glows red hot, though it doesn't burn your skin. A vision flashes in your mind: a blazing bonfire and dancing figures on a midsummer night, centuries ago.",
+                choices: [
+                    { text: "Trace another symbol", nextScene: "ruins_altar" },
+                    { text: "Step back from the altar", nextScene: "ancient_ruins_path" }
+                ]
+            },
+            ruins_water_symbol: {
+                text: "The water symbol glows with a cool blue light as you trace it. You feel a brief sensation of rushing water and hear whispers that speak of hidden caves behind waterfalls.",
+                choices: [
+                    { text: "Trace another symbol", nextScene: "ruins_altar" },
+                    { text: "Step back from the altar", nextScene: "ancient_ruins_path" }
+                ]
+            },
+            ruins_leaf_symbol: {
+                text: "The leaf symbol pulses with green energy under your touch. The scent of wild herbs fills the air momentarily, and you feel connected to the ancient druids who once tended these grounds.",
+                choices: [
+                    { text: "Trace another symbol", nextScene: "ruins_altar" },
+                    { text: "Step back from the altar", nextScene: "ancient_ruins_path" }
+                ]
+            },
+            ruins_pillars: {
+                text: "You study the stone pillars. Each bears carvings depicting ancient Celtic stories—tales of heroes, gods, and magical beasts. One pillar shows a harper playing for what appears to be a gathering of both humans and otherworldly beings.",
+                choices: [
+                    { text: "Look more closely at the harper pillar", nextScene: "harper_pillar" },
+                    { text: "Return to the altar", nextScene: "ruins_altar" },
+                    { text: "Look for a path beyond the ruins", nextScene: "ruins_path_beyond" }
+                ]
+            },
+            harper_pillar: {
+                text: "The carving shows a harper playing before an audience of mortals and immortals alike. Below the image, faded text reads: 'The Harp of Ages bridges worlds when played with a pure heart.' You notice a small keyhole at the base of the pillar.",
+                choices: [
+                    { text: "Try the Silver Key in the keyhole (if you have it)", nextScene: "pillar_key_unlock", requires: "Silver Key" },
+                    { text: "Return to examining the other pillars", nextScene: "ruins_pillars" }
+                ]
+            },
+            pillar_key_unlock: {
+                text: "The Silver Key fits perfectly. As you turn it, the ground trembles slightly and the pillar sinks into the earth, revealing a staircase descending into darkness. A cool breeze carries the scent of ancient stone.",
+                choices: [
+                    { text: "Descend the staircase", nextScene: "druid_underground" }
+                ]
+            },
+            druid_underground: {
+                text: "You descend into a vast underground chamber that must have been a druid sanctuary. Phosphorescent moss provides gentle illumination. At the chamber's center stands a stone table, and upon it, an ancient book bound in leather.",
+                choices: [
+                    { text: "Approach the book", nextScene: "druid_book" },
+                    { text: "Search the chamber", nextScene: "druid_chamber_search" }
+                ]
+            },
+            druid_book: {
+                text: "The book's cover bears no title, just a spiral symbol. When you open it, the pages are filled with scripts in an ancient language. Remarkably, the words seem to shift before your eyes, becoming readable.",
+                choices: [
+                    { text: "Read about the Harp of Ages", nextScene: "book_harp_info" },
+                    { text: "Read about the sacred sites", nextScene: "book_sacred_sites" },
+                    { text: "Close the book and search the chamber", nextScene: "druid_chamber_search" }
+                ]
+            },
+            book_harp_info: {
+                text: "'The Harp of Ages was crafted from silver from the Otherworld and strung with the hair of a banshee freely given. Its music can heal wounds, open pathways between worlds, or seal them shut. The Harp rests behind the Whispering Waterfall, guarded by ancient magic that only the worthy may pass.'",
+                choices: [
+                    { text: "Read about the sacred sites", nextScene: "book_sacred_sites" },
+                    { text: "Close the book and search the chamber", nextScene: "druid_chamber_search" }
+                ]
+            },
+            book_sacred_sites: {
+                text: "'Three sites form the sacred triangle: the Faerie Ring of Moonlight, the Pooka's Glen of Shadow, and the Druid's Circle of Wisdom. One who has been blessed at all three sites may approach the Harp with the certainty of worthiness.'",
+                item: "Druidic Knowledge",
+                choices: [
+                    { text: "Read about the Harp of Ages", nextScene: "book_harp_info" },
+                    { text: "Close the book and search the chamber", nextScene: "druid_chamber_search" }
+                ],
+                consequenceText: "You've gained valuable Druidic Knowledge!"
+            },
+            druid_chamber_search: {
+                text: "Searching the chamber, you find an alcove containing a small wooden box. Inside is a Clover Amulet, a four-leafed clover preserved in amber and hanging from a leather cord.",
+                item: "Clover Amulet",
+                choices: [
+                    { text: "Return to the book", nextScene: "druid_book" },
+                    { text: "Leave the underground chamber", nextScene: "leave_druid_chamber" }
+                ]
+            },
+            leave_druid_chamber: {
+                text: "You climb back to the surface, the ancient knowledge and perhaps new items in your possession. The ruins seem to have an air of approval about them now.",
+                choices: [
+                    { text: "Return to the stone circle", nextScene: "ancient_ruins_path" }
+                ]
+            },
+            
+            ruins_path_beyond: {
+                text: "Beyond the stone circle, you find two distinct paths. One leads deeper into the forest, while another climbs toward distant mountains visible through gaps in the trees.",
+                choices: [
+                    { text: "Take the forest path", nextScene: "forest_path_from_ruins" },
+                    { text: "Take the mountain path", nextScene: "mountain_path_start" },
+                    { text: "Return to the ruins", nextScene: "ancient_ruins_path" }
+                ]
+            },
+
+            // MOUNTAIN PATH SEQUENCE
+            mountain_path_start: {
+                text: "The path climbs steadily, the forest giving way to rocky terrain. The air grows cooler as you ascend. In the distance, you see mist-shrouded peaks.",
+                choices: [
+                    { text: "Continue climbing", nextScene: "mountain_climb" },
+                    { text: "Return to the ruins", nextScene: "ruins_path_beyond" }
+                ]
+            },
+            mountain_climb: {
+                text: "The path grows steeper. As you round a bend, you see an old man sitting on a boulder. His beard is long and white, and he holds a gnarled staff. He watches you with eyes that seem as ancient as the mountains themselves.",
+                choices: [
+                    { text: "Approach and greet him", nextScene: "hermit_greeting" },
+                    { text: "Observe him cautiously from a distance", nextScene: "hermit_observe" }
+                ]
+            },
+            hermit_observe: {
+                text: "You hang back, watching the old man. He seems peaceful, occasionally glancing at the sky or running his fingers along the length of his staff. After a few moments, he speaks without turning your way: 'I don't bite, traveler. Come, sit with me a while.'",
+                choices: [
+                    { text: "Approach him now", nextScene: "hermit_greeting" },
+                    { text: "Return down the mountain path", nextScene: "mountain_path_start" }
+                ]
+            },
+            hermit_greeting: {
+                text: "'Well met, traveler,' the old man says in a voice surprisingly strong. 'Few venture this way anymore. What brings you to these heights?'",
+                choices: [
+                    { text: "Tell him about your quest for the Harp", nextScene: "hermit_harp_talk" },
+                    { text: "Ask who he is", nextScene: "hermit_identity" },
+                    { text: "Be vague about your purpose", nextScene: "hermit_vague" }
+                ]
+            },
+            hermit_vague: {
+                text: "You give a noncommittal answer about exploring the land. The old man's eyes twinkle with amusement. 'There are easier places to explore than these heights,' he says. 'But then, those seeking something specific often find their paths lead to unexpected places.'",
+                choices: [
+                    { text: "Admit you're searching for the Harp of Ages", nextScene: "hermit_harp_talk" },
+                    { text: "Ask who he is", nextScene: "hermit_identity" }
+                ]
+            },
+            hermit_identity: {
+                text: "The old man chuckles. 'I've been called many things over the long years. Some called me a druid, others a bard, and a few even whispered I might be something else entirely. These days, I'm simply a watcher of the passing world.'",
+                choices: [
+                    { text: "Tell him about your quest for the Harp", nextScene: "hermit_harp_talk" },
+                    { text: "Ask what he knows about this region", nextScene: "hermit_region_knowledge" }
+                ]
+            },
+            hermit_region_knowledge: {
+                text: "'These mountains remember the oldest songs of this land,' he says, gazing at the peaks. 'The stones here have witnessed the coming and going of many peoples, many magics. Some say the mountains themselves are sleeping giants.' He looks back at you with a knowing smile. 'But you didn't climb all this way for old tales, did you?'",
+                choices: [
+                    { text: "Tell him about your quest for the Harp", nextScene: "hermit_harp_talk" },
+                    { text: "Thank him and continue your journey", nextScene: "mountain_vista" }
+                ]
+            },
+            hermit_harp_talk: {
+                text: "At the mention of the Harp, the old man's eyes sparkle. 'Ah, the Harp of Ages. A treasure indeed, and not just for its beauty or value. You seek to claim it, then?' His gaze seems to evaluate your worthiness.",
+                choices: [
+                    { text: "Tell him you seek it for knowledge or to preserve history", nextScene: "hermit_approve" },
+                    { text: "Admit you're drawn by the adventure and discovery", nextScene: "hermit_neutral" },
+                    { text: "Show him your Druidic Knowledge (if you have it)", nextScene: "hermit_knowledge_show", requires: "Druidic Knowledge" }
+                ]
+            },
+            hermit_neutral: {
+                text: "He nods thoughtfully. 'An honest answer. The thrill of discovery drives many adventurers. But remember, some discoveries come with responsibilities.' He reaches into his robe and brings out a small silver flute. 'This may help you on your journey, though it's no guarantee of success.'",
+                item: "Silver Flute",
+                choices: [
+                    { text: "Thank him and ask about the path ahead", nextScene: "hermit_path_ahead" }
+                ],
+                consequenceText: "The hermit gave you a Silver Flute!"
+            },
+            hermit_approve: {
+                text: "The old man nods approvingly. 'A worthy cause. The Harp's music should be heard, its stories remembered.' He reaches into his robe and produces a small silver flute. 'This humble instrument isn't the equal of the Harp, but it may help when other paths are blocked.'",
+                item: "Silver Flute",
+                choices: [
+                    { text: "Thank him and ask about the path ahead", nextScene: "hermit_path_ahead" }
+                ],
+                consequenceText: "The hermit gave you a Silver Flute!"
+            },
+            hermit_knowledge_show: {
+                text: "'You've walked in the old ways,' the hermit says, clearly impressed. 'Few these days understand the sacred triangle.' He stands and bows slightly. 'I can offer you this—a melody for your journey.' He plays a haunting tune on a small silver flute, then hands it to you. 'Music opens many doors in this land.'",
+                item: "Silver Flute",
+                choices: [
+                    { text: "Thank him and ask about the path ahead", nextScene: "hermit_path_ahead" }
+                ],
+                consequenceText: "The hermit gave you a Silver Flute and taught you a special melody!"
+            },
+            hermit_path_ahead: {
+                text: "'Beyond the ridge lies the Eagle's Eyrie,' the old man tells you. 'An ancient being dwells there who sees much that happens in these lands. Respectful visitors may receive wisdom... others receive only silence.'",
+                choices: [
+                    { text: "Thank him and continue toward the Eyrie", nextScene: "mountain_vista" },
+                    { text: "Ask if there are dangers to be aware of", nextScene: "hermit_dangers" }
+                ]
+            },
+            hermit_dangers: {
+                text: "'The mountain has its guardians,' he says gravely. 'Wild creatures and wilder magics. The path grows narrow, with sheer drops. And the Eagle... well, she has her moods.' He smiles. 'But you've come this far.'",
+                choices: [
+                    { text: "Thank him and continue toward the Eyrie", nextScene: "mountain_vista" }
+                ]
+            },
+            mountain_vista: {
+                text: "You leave the hermit and climb higher. Eventually, you reach a scenic overlook offering a breathtaking view of the entire region. You can see the forest, the distant coast, and even the faint shimmer of what might be a waterfall. The path continues to the Eagle's Eyrie, but it grows treacherously narrow.",
+                choices: [
+                    { text: "Return to the ruins with your new knowledge", nextScene: "ruins_path_beyond" },
+                    { text: "Head back down to the hermit", nextScene: "hermit_greeting" }
+                ]
+            },
+            
             tower_circle: {
                 text: "You circle the tower. The walls are sheer and offer no easy handholds or other entrances. The only obvious way in seems to be the main door.",
                 choices: [
                     { text: "Try the main door", nextScene: "tower_entrance" },
                     { text: "Give up on the tower for now", nextScene: "rocky_outcrop_path" }
                 ]
-            }
+            },
+                    // === COASTAL REGION ===
+        forest_path_from_ruins: {
+            text: "The forest path winds through ancient oaks. After a few hours, you detect a salty breeze—the sea must be near. The trees begin to thin, revealing glimpses of blue horizon.",
+            choices: [
+                { text: "Head toward the coast", nextScene: "coastal_approach" },
+                { text: "Return to the ruins", nextScene: "ancient_ruins_path" }
+            ]
+        },
+        coastal_approach: {
+            text: "The forest gives way to windswept cliffs. Below, waves crash against a rocky shoreline, and in a sheltered cove, you can see a small fishing village. A narrow path zigzags down the cliff face.",
+            choices: [
+                { text: "Descend to the village", nextScene: "fishing_village" },
+                { text: "Follow the cliff edge", nextScene: "coastal_cliffs" }
+            ]
+        },
+        coastal_cliffs: {
+            text: "The cliff path offers breathtaking views of the wild coastline. Sea birds wheel overhead, their cries carried on the wind. In the distance, you spot what appears to be a circle of standing stones perched right at the cliff edge.",
+            choices: [
+                { text: "Investigate the standing stones", nextScene: "sea_stones" },
+                { text: "Head down to the beach below", nextScene: "rocky_beach" },
+                { text: "Go back and descend to the village", nextScene: "fishing_village" }
+            ]
+        },
+        sea_stones: {
+            text: "The ancient stones form a perfect circle, weathered by centuries of salt spray. Each stone bears faded carvings of sea creatures—some familiar, others mythical. The center stone has a bowl-shaped depression filled with rainwater.",
+            choices: [
+                { text: "Touch the water in the central stone", nextScene: "sea_stone_water" },
+                { text: "Study the carvings more closely", nextScene: "sea_stone_carvings" },
+                { text: "Leave the circle and head to the beach", nextScene: "rocky_beach" }
+            ]
+        },
+        sea_stone_water: {
+            text: "As your fingers touch the water, it ripples with unnatural purpose. In the reflection, you briefly see faces—beautiful but inhuman, with dark eyes and skin that seems to shimmer with scales. The water feels surprisingly warm and leaves a faint glow on your fingertips.",
+            item: "Sea Blessing",
+            choices: [
+                { text: "Study the carvings more closely", nextScene: "sea_stone_carvings" },
+                { text: "Leave the circle", nextScene: "coastal_cliffs" }
+            ],
+            consequenceText: "You've received a Sea Blessing!"
+        },
+        sea_stone_carvings: {
+            text: "One carving shows humans offering gifts to half-human, half-seal beings emerging from the waves. Another depicts a hidden cave behind a waterfall. The most prominent carving shows a figure playing what appears to be the Harp of Ages to an audience of sea creatures.",
+            choices: [
+                { text: "Touch the water in the central stone", nextScene: "sea_stone_water" },
+                { text: "Leave the circle", nextScene: "coastal_cliffs" }
+            ]
+        },
+        rocky_beach: {
+            text: "The narrow path brings you to a secluded beach of smooth stones and coarse sand. Tide pools teem with colorful marine life. Something glints among the rocks—the remains of an old shipwreck, perhaps.",
+            choices: [
+                { text: "Examine the tide pools", nextScene: "tide_pools" },
+                { text: "Investigate the glinting objects", nextScene: "shipwreck_remains" },
+                { text: "Walk along the shoreline", nextScene: "shore_walking" }
+            ]
+        },
+        tide_pools: {
+            text: "The pools are miniature worlds of wonder—starfish, anemones, tiny darting fish. As you watch, you could swear that some of the patterns in the water form symbols similar to those you've seen on ancient stones. One pool contains a perfect shell that seems to glow from within.",
+            choices: [
+                { text: "Take the glowing shell", nextScene: "take_shell" },
+                { text: "Leave the tide pools alone", nextScene: "rocky_beach" }
+            ]
+        },
+        take_shell: {
+            text: "The shell feels warm in your palm and pulses faintly like a heartbeat. It's spiral shape catches the light in hypnotic patterns. You hear a soft chuckle behind you—but when you turn, only the empty beach greets you.",
+            item: "Selkie Shell",
+            choices: [
+                { text: "Investigate the glinting objects now", nextScene: "shipwreck_remains" },
+                { text: "Walk along the shoreline", nextScene: "shore_walking" }
+            ],
+            consequenceText: "You found a mysterious Selkie Shell!"
+        },
+        shipwreck_remains: {
+            text: "Half-buried in the sand and stones are weathered timbers and corroded metal—the bones of an old ship. Among the debris, you find a tarnished silver pendant shaped like a teardrop.",
+            item: "Ocean Tear Pendant",
+            choices: [
+                { text: "Examine the tide pools", nextScene: "tide_pools" },
+                { text: "Walk along the shoreline", nextScene: "shore_walking" }
+            ],
+            consequenceText: "You found an Ocean Tear Pendant!"
+        },
+        shore_walking: {
+            text: "As you walk along the shore, you notice a figure sitting on a distant rock, gazing out to sea. It appears to be a woman with long dark hair, draped in what looks like a silver-gray coat despite the mild weather.",
+            choices: [
+                { text: "Approach the figure", nextScene: "selkie_encounter" },
+                { text: "Return to the beach", nextScene: "rocky_beach" },
+                { text: "Head up the path to the village", nextScene: "fishing_village" }
+            ]
+        },
+        selkie_encounter: {
+            text: "The woman turns as you approach. Her eyes are impossibly dark and deep, her skin seems to shimmer in the sunlight. She regards you with curious caution. 'Not many walk these shores alone,' she says, her voice musical but strange. 'What brings you to the edges of land and sea?'",
+            choices: [
+                { text: "Tell her about your quest for the Harp", nextScene: "selkie_harp_talk" },
+                { text: "Ask who she is", nextScene: "selkie_identity" },
+                { text: "Show her the Selkie Shell (if you have it)", nextScene: "selkie_shell_show", requires: "Selkie Shell" }
+            ]
+        },
+        selkie_identity: {
+            text: "She smiles mysteriously. 'I am of here and not of here. Of land and sea both, belonging fully to neither.' She adjusts her coat slightly. 'Some call my kind selkies. We walk in two worlds, as perhaps you now do, wanderer.'",
+            choices: [
+                { text: "Tell her about your quest for the Harp", nextScene: "selkie_harp_talk" },
+                { text: "Ask about the village", nextScene: "selkie_village_info" }
+            ]
+        },
+        selkie_harp_talk: {
+            text: "'The Harp of Ages,' she muses, her gaze turning back to the sea. 'Its music reaches even beneath the waves. We too have stories of its power.' She looks at you assessingly. 'What would you do with such a treasure, land-walker?'",
+            choices: [
+                { text: "Say you want to learn its music and share it", nextScene: "selkie_approve" },
+                { text: "Say you want to protect it from those who might misuse it", nextScene: "selkie_neutral" },
+                { text: "Show her the Ocean Tear Pendant (if you have it)", nextScene: "selkie_pendant_show", requires: "Ocean Tear Pendant" }
+            ]
+        },
+        selkie_shell_show: {
+            text: "Her eyes widen at the sight of the shell. 'You found one of our messengers.' She reaches out, not taking it but letting her fingers hover over its spiral. 'This shell has heard the songs of my people. It may help you recognize the true music when you hear it.'",
+            choices: [
+                { text: "Tell her about your quest for the Harp", nextScene: "selkie_harp_talk" },
+                { text: "Ask about the shell's purpose", nextScene: "selkie_shell_purpose" }
+            ]
+        },
+        selkie_shell_purpose: {
+            text: "'We leave these for those with the gift of seeing,' she explains. 'They hold echoes of our songs, guiding those lost between worlds. If you listen carefully in the right places, it will whisper secrets of the coast and sea.'",
+            choices: [
+                { text: "Ask about the Harp of Ages", nextScene: "selkie_harp_talk" },
+                { text: "Thank her and take your leave", nextScene: "selkie_farewell" }
+            ]
+        },
+        selkie_pendant_show: {
+            text: "She gasps softly. 'An Ocean Tear...' Her fingers trace the pendant without touching it. 'This was worn by one who moved between our worlds many years ago. A translator of songs.' Her eyes meet yours. 'It would serve you well where water and music meet.'",
+            choices: [
+                { text: "Ask if she means the Whispering Waterfall", nextScene: "selkie_waterfall_hint" },
+                { text: "Thank her and take your leave", nextScene: "selkie_farewell" }
+            ]
+        },
+        selkie_waterfall_hint: {
+            text: "'The falling water that speaks...' She nods. 'The veil is thin there. Water remembers all songs ever sung. Wear this pendant where the water whispers, and you may hear what others cannot.'",
+            choices: [
+                { text: "Thank her for her wisdom", nextScene: "selkie_farewell" }
+            ]
+        },
+        selkie_approve: {
+            text: "Her expression softens. 'A worthy purpose. Music is meant to be shared between all worlds.' She reaches into her coat and produces a small flute carved from coral. 'This humble instrument carries the breath of the sea. It may help you when you face the final guardian.'",
+            item: "Coral Flute",
+            choices: [
+                { text: "Ask about this 'final guardian'", nextScene: "selkie_guardian_info" },
+                { text: "Thank her and take your leave", nextScene: "selkie_farewell" }
+            ],
+            consequenceText: "The selkie gave you a Coral Flute!"
+        },
+        selkie_guardian_info: {
+            text: "'Ancient and watchful, with knowledge of all who have sought the Harp before you,' she says cryptically. 'Neither good nor evil, but bound to test the worthiness of any who approach. Music touches its heart, but only if the player's intentions are pure.'",
+            choices: [
+                { text: "Thank her for her help", nextScene: "selkie_farewell" }
+            ]
+        },
+        selkie_farewell: {
+            text: "She inclines her head slightly. 'May the tides favor your journey, traveler.' With graceful movement, she slips off the rock and walks toward the water's edge. You blink, and suddenly she's gone—only ripples in the water suggest she was ever there at all.",
+            choices: [
+                { text: "Head to the fishing village", nextScene: "fishing_village" },
+                { text: "Return to the beach", nextScene: "rocky_beach" }
+            ]
+        },
+        fishing_village: {
+            text: "The village consists of stone cottages with thatched roofs, weathered by salt and wind. Fishing nets hang to dry, and boats bob in the protected harbor. Villagers go about their business, some giving you curious glances.",
+            choices: [
+                { text: "Speak to the old fisherman mending nets", nextScene: "old_fisherman" },
+                { text: "Visit the village tavern", nextScene: "coastal_tavern" },
+                { text: "Explore the harbor", nextScene: "village_harbor" }
+            ]
+        },
+
+        // COASTAL VILLAGE AREAS
+        coastal_tavern: {
+            text: "The tavern is a weathered stone building with a thatched roof. Inside, the air is warm and smells of peat smoke and fish stew. A few locals look up as you enter, then return to their conversations. A board above the bar proclaims the establishment as 'The Selkie's Rest.'",
+            choices: [
+                { text: "Speak to the barkeep", nextScene: "tavern_barkeep" },
+                { text: "Listen to local conversations", nextScene: "tavern_eavesdrop" },
+                { text: "Return to the village center", nextScene: "fishing_village" }
+            ]
+        },
+        tavern_barkeep: {
+            text: "The barkeep, a burly man with a salt-and-pepper beard, greets you with a nod. 'Not seen you before. What can I get ye?' His eyes are shrewd but not unfriendly.",
+            choices: [
+                { text: "Order a drink and ask about local stories", nextScene: "barkeep_stories" },
+                { text: "Ask about the Whispering Waterfall", nextScene: "barkeep_waterfall" },
+                { text: "Leave the bar", nextScene: "coastal_tavern" }
+            ]
+        },
+        barkeep_stories: {
+            text: "'Stories?' He chuckles, sliding a mug of amber liquid your way. 'This coast has more tales than fish in the sea. Some you'd believe, some you wouldn't.' He leans closer. 'Most interesting lately is old Moira claiming she saw lights dancing over the water at midnight. Blue-green lights, moving in patterns too precise for nature's doing.'",
+            choices: [
+                { text: "Ask about Moira", nextScene: "barkeep_moira" },
+                { text: "Ask about the Whispering Waterfall", nextScene: "barkeep_waterfall" },
+                { text: "Thank him and explore elsewhere", nextScene: "coastal_tavern" }
+            ]
+        },
+        barkeep_moira: {
+            text: "'Moira? She's been here longer than anyone. Lives in the blue-doored cottage at the village edge. Some say she was beautiful once, caught the eye of a selkie lord.' He shrugs. 'She knows things others don't—herbs that heal impossible wounds, songs that calm the wildest storms. If you've business with the old powers, she's the one to see.'",
+            choices: [
+                { text: "Ask about the Whispering Waterfall", nextScene: "barkeep_waterfall" },
+                { text: "Thank him and seek out Moira's cottage", nextScene: "moira_cottage" },
+                { text: "Return to the village", nextScene: "fishing_village" }
+            ]
+        },
+        barkeep_waterfall: {
+            text: "The barkeep's expression grows serious. 'That place... it's not for casual visitors. The waters there remember all they've touched.' He polishes a glass thoughtfully. 'They say on certain nights, when the moon is right, you can hear voices in the falling water—old voices, speaking forgotten tongues. Best leave such places to the Fair Folk and their kin.'",
+            choices: [
+                { text: "Thank him for the warning and leave", nextScene: "coastal_tavern" },
+                { text: "Ask about Moira", nextScene: "barkeep_moira" }
+            ]
+        },
+        tavern_eavesdrop: {
+            text: "You sit at an empty table, nursing a drink and listening. Most conversations are mundane—fishing catches, weather predictions, gossip. But at one table, you overhear a weathered sailor speaking in hushed tones: '...swear by my grandmother's grave, I saw it. A great harp, shining like moonlight on water, carried by what looked like a seal with human hands...'",
+            choices: [
+                { text: "Approach the sailor", nextScene: "tavern_sailor" },
+                { text: "Speak to the barkeep", nextScene: "tavern_barkeep" },
+                { text: "Leave the tavern", nextScene: "fishing_village" }
+            ]
+        },
+        tavern_sailor: {
+            text: "The sailor notices your approach and falls silent. 'Something I can help ye with, stranger?' His companions eye you warily.",
+            choices: [
+                { text: "Ask about the harp he mentioned", nextScene: "sailor_harp_story" },
+                { text: "Apologize for interrupting and leave", nextScene: "coastal_tavern" }
+            ]
+        },
+        sailor_harp_story: {
+            text: "He studies you, then shrugs. 'Wouldn't believe me anyway. No one does. But I saw what I saw, out by the Sea Caves during the last spring tide. A creature, half-seal and half-human, carrying a harp that glowed with its own light.' He takes a long drink. 'It played a few notes, and I swear the tide halted its advance for several minutes.'",
+            choices: [
+                { text: "Thank him for sharing his story", nextScene: "coastal_tavern" },
+                { text: "Ask where exactly he saw this", nextScene: "sailor_location" }
+            ]
+        },
+        sailor_location: {
+            text: "'North of the village, where the cliffs form that horseshoe shape. There's a series of caves only accessible at low tide.' He narrows his eyes. 'But don't go getting any foolish ideas. The sea doesn't forgive those who trespass in her secrets.'",
+            choices: [
+                { text: "Thank him for the information", nextScene: "coastal_tavern" }
+            ]
+        },
+        village_harbor: {
+            text: "The small harbor cradles a dozen fishing boats. Some are being unloaded, their catches sorted into baskets. Nets hang to dry in the sea breeze, and the air is thick with the smell of salt and fish. A group of children play at the water's edge, searching for interesting shells.",
+            choices: [
+                { text: "Help an elderly fisherman with his boat", nextScene: "harbor_help" },
+                { text: "Speak with the children", nextScene: "harbor_children" },
+                { text: "Return to the village center", nextScene: "fishing_village" }
+            ]
+        },
+        harbor_help: {
+            text: "You assist the old man in securing his boat. He thanks you with a toothless smile. 'Kind of ye to help these old bones. Not many strangers show such courtesy.' As you work, he tells you he's been fishing these waters for over sixty years.",
+            choices: [
+                { text: "Ask if he's ever seen anything unusual", nextScene: "harbor_tales" },
+                { text: "Thank him and explore elsewhere", nextScene: "village_harbor" }
+            ]
+        },
+        harbor_tales: {
+            text: "'Unusual?' He chuckles. 'These waters are full of wonders if you know where to look.' He glances around before continuing quietly. 'Once saw a circle of them—the sea folk—dancing in the moonlight on the water's surface. And another time, heard music so beautiful it brought tears to my eyes, coming from beneath the waves.' He presses something into your hand—a small, shiny pebble with unusual swirling patterns.",
+            item: "Shiny Pebble",
+            choices: [
+                { text: "Thank him for the gift", nextScene: "village_harbor" }
+            ],
+            consequenceText: "The old fisherman gave you a Shiny Pebble!"
+        },
+        harbor_children: {
+            text: "The children are collecting shells, comparing their finds excitedly. One little girl with bright red hair notices you watching and approaches, holding up a spiral shell. 'This one's magic,' she says confidently. 'If you listen real careful, you can hear music inside it.'",
+            choices: [
+                { text: "Ask about the magic shell", nextScene: "children_shell" },
+                { text: "Politely excuse yourself", nextScene: "village_harbor" }
+            ]
+        },
+        children_shell: {
+            text: "The girl holds the shell out to you. 'Listen!' When you put it to your ear, instead of the usual ocean sounds, you hear what genuinely seems like a distant, haunting melody. The girl nods knowingly. 'Mam says they're the selkies' songs. They sing to remember their land families when they're back in the sea.'",
+            choices: [
+                { text: "Thank her and return the shell", nextScene: "village_harbor" },
+                { text: "Ask if she's ever seen a selkie", nextScene: "children_selkie" }
+            ]
+        },
+        children_selkie: {
+            text: "She glances around conspiratorially. 'Once! By the rocks past the beach. It was watching me, and I wasn't scared at all.' She lowers her voice. 'My gran says my grandda was one. That's why I've got red hair—it's the seal blood!' Before you can respond, her mother calls her away.",
+            choices: [
+                { text: "Return to the village center", nextScene: "fishing_village" }
+            ]
+        },
+        moira_cottage: {
+            text: "At the village edge stands a small stone cottage with a blue door, just as described. Wildflowers and herbs grow in orderly beds around it. As you approach, the door opens before you can knock, and an elderly woman with silver-white hair appears. Her eyes, though clouded with age, seem to look through you rather than at you.",
+            choices: [
+                { text: "Greet her respectfully", nextScene: "moira_greeting" },
+                { text: "Turn away—this feels too strange", nextScene: "fishing_village" }
+            ]
+        },
+        moira_greeting: {
+            text: "'I've been expecting someone,' the old woman says. 'Though whether you're the one or not remains to be seen.' She steps aside. 'Come in, come in. The kettle's just boiled.'",
+            choices: [
+                { text: "Enter the cottage", nextScene: "moira_cottage_interior" },
+                { text: "Politely decline and leave", nextScene: "fishing_village" }
+            ]
+        },
+        moira_cottage_interior: {
+            text: "The cottage interior is filled with bundles of drying herbs, shells, and stones arranged in patterns. A small fire crackles in the hearth, and the walls are lined with shelves of jars and bottles. 'Sit,' Moira says, pouring tea into two cups. 'And tell me what brings you to an old woman's door.'",
+            choices: [
+                { text: "Ask about the Harp of Ages", nextScene: "moira_harp" },
+                { text: "Inquire about her knowledge of selkies", nextScene: "moira_selkies" },
+                { text: "Show her your magical items (if you have any)", nextScene: "moira_items_check" }
+            ]
+        },
+        moira_items_check: {
+            text: "Moira studies your collection with interest. 'You've gathered quite a few treasures on your journey,' she observes, her fingers hovering over each item as if reading its energy.",
+            choices: [
+                { text: "Ask about the Harp of Ages", nextScene: "moira_harp" },
+                { text: "Inquire about her knowledge of selkies", nextScene: "moira_selkies" }
+            ]
+        },
+        moira_harp: {
+            text: "At the mention of the Harp, Moira grows very still. 'That name is not spoken lightly under this roof,' she says softly. 'The Harp of Ages is not a trinket to be claimed, but a sacred trust.' She studies you closely. 'It tests those who seek it, and its judgment is final. Why do you seek such a thing?'",
+            choices: [
+                { text: "Explain your quest honestly", nextScene: "moira_quest_honest" },
+                { text: "Speak vaguely of curiosity and adventure", nextScene: "moira_quest_vague" }
+            ]
+        },
+        moira_quest_honest: {
+            text: "Moira listens to your explanation, nodding occasionally. When you finish, she rises and takes a small box from a shelf. 'You speak with an honest heart, at least. Take this—it's a charm woven by one who walks between worlds. It may help when water and magic meet.' Inside the box is a delicate bracelet woven of what looks like seaweed and tiny pearls.",
+            item: "Selkie Charm",
+            choices: [
+                { text: "Thank her and ask for advice", nextScene: "moira_advice" },
+                { text: "Thank her and leave", nextScene: "fishing_village" }
+            ],
+            consequenceText: "Moira gave you a Selkie Charm!"
+        },
+        moira_quest_vague: {
+            text: "Moira's eyes narrow slightly. 'Curiosity has led many to places they weren't prepared to go.' She sips her tea. 'I've no gift for those who hide their hearts, but I'll give you this advice freely: the Harp responds to truth, above all else. Approach it with deception, and you'll find only silence where there should be music.'",
+            choices: [
+                { text: "Thank her for the advice and leave", nextScene: "fishing_village" },
+                { text: "Reconsider and speak honestly", nextScene: "moira_quest_honest" }
+            ]
+        },
+        moira_advice: {
+            text: "'Listen for the music beneath the water's roar,' she tells you. 'When you face the final barrier, remember that all the traditions of this land—the sea folk, the Fair Folk, the old druids—they're branches of the same tree. The Harp knows this, even if we've forgotten.' She pats your hand. 'Now go. The tide waits for no one, not even those who seek ancient treasures.'",
+            choices: [
+                { text: "Thank her and return to the village", nextScene: "fishing_village" }
+            ]
+        },
+        moira_selkies: {
+            text: "A smile touches Moira's lips. 'The sea folk? Oh, I know them well enough.' She touches a lock of her silver hair. 'In my youth, I had hair as dark as midnight, and eyes that caught the attention of one who wore a sealskin when the moon waned.' Her gaze grows distant. 'They're proud and ancient, with songs that can calm storms or call them. They guard the Harp sometimes, when it travels between realms.'",
+            choices: [
+                { text: "Ask more about the Harp", nextScene: "moira_harp" },
+                { text: "Thank her for sharing and leave", nextScene: "fishing_village" }
+            ]
+        },
+        old_fisherman: {
+            text: "The weathered old man looks up from his nets, squinting at you with sea-blue eyes. 'Not from these parts, are ye?' he observes, hands never stopping their practiced movements with the netting.",
+            choices: [
+                { text: "Ask about local legends", nextScene: "fisherman_legends" },
+                { text: "Ask if he's seen anything unusual lately", nextScene: "fisherman_unusual" },
+                { text: "Inquire about the Harp of Ages", nextScene: "fisherman_harp" }
+            ]
+        },
+        fisherman_legends: {
+            text: "'Legends? Aye, we've plenty,' he chuckles. 'The selkie folk who shed their sealskins to walk among us. The merrow with their red caps. Old Manannan Mac Lir himself riding waves during storms.' He nods toward the sea. 'Truth in all of 'em, if you've eyes to see.'",
+            choices: [
+                { text: "Ask specifically about selkies", nextScene: "fisherman_selkies" },
+                { text: "Ask about unusual recent events", nextScene: "fisherman_unusual" },
+                { text: "Thank him and visit the tavern", nextScene: "coastal_tavern" }
+            ]
+        },
+        fisherman_selkies: {
+            text: "He lowers his voice. 'They walk among us sometimes. Beautiful folk with sad eyes. My grandfather claimed to have had a selkie wife for seven years before she found her hidden sealskin and returned to the sea.' He sighs. 'Best to admire from afar and never try to keep what belongs to the ocean.'",
+            choices: [
+                { text: "Ask about the Harp of Ages", nextScene: "fisherman_harp" },
+                { text: "Thank him and explore the harbor", nextScene: "village_harbor" }
+            ]
+        },
+        fisherman_unusual: {
+            text: "'Strange lights out by the Sea Caves three nights past,' he says, pointing north along the coast. 'And music too beautiful to be human. Some say the Good Folk, others say the sea people. Me?' He shrugs. 'I stay in on such nights, with doors locked and iron by the threshold.'",
+            choices: [
+                { text: "Ask about these Sea Caves", nextScene: "fisherman_caves" },
+                { text: "Thank him and visit the tavern", nextScene: "coastal_tavern" }
+            ]
+        },
+        fisherman_caves: {
+            text: "'Only accessible at low tide, about an hour's walk north,' he explains. 'Don't get caught there when the tide comes in, mind you. Some say there's passages that lead deep under the cliffs, but none I know have ventured far. Too many tales of those who never returned.'",
+            choices: [
+                { text: "Ask when the next low tide will be", nextScene: "fisherman_tide_info" },
+                { text: "Thank him and explore elsewhere", nextScene: "fishing_village" }
+            ]
+        },
+        fisherman_tide_info: {
+            text: "He glances at the position of the sun. 'You're in luck. Low tide's coming in a few hours. You'd have time to reach the caves and explore a bit, if that's your fancy.' He gives you a stern look. 'But mind the time. The sea doesn't warn before it claims what's hers.'",
+            choices: [
+                { text: "Thank him and head north to the caves", nextScene: "path_to_sea_caves" },
+                { text: "Visit other parts of the village first", nextScene: "fishing_village" }
+            ]
+        },
+        fisherman_harp: {
+            text: "The old man's hands still. 'The Harp of Ages? Now there's a name not spoken lightly.' He studies you carefully. 'They say its music can call the selkies to shore or send them back to sea. Some even claim it can command the tides themselves. If you seek such a thing...' He shakes his head. 'Be certain of your heart.'",
+            choices: [
+                { text: "Ask where you might find information about it", nextScene: "fisherman_harp_location" },
+                { text: "Thank him and move on", nextScene: "fishing_village" }
+            ]
+        },
+        fisherman_harp_location: {
+            text: "'There's an old woman at the edge of the village. Moira's her name. Lives in a cottage with a blue door.' He returns to his nets. 'If anyone knows more of such things, it would be her. They say she had dealings with the sea folk in her younger days.'",
+            choices: [
+                { text: "Seek out Moira's cottage", nextScene: "moira_cottage" },
+                { text: "Thank him and visit the tavern first", nextScene: "coastal_tavern" }
+            ]
+        },
+        path_to_sea_caves: {
+            text: "The coastal path winds north, hugging the cliff base. Waves crash nearby, but the tide is indeed receding. After an hour's walk, you spot dark openings in the cliff face that would be underwater during high tide.",
+            choices: [
+                { text: "Explore the sea caves", nextScene: "sea_caves_entrance" },
+                { text: "Return to the village", nextScene: "fishing_village" }
+            ]
+        },
+        sea_caves_entrance: {
+            text: "The cave opening is adorned with unusual patterns—whether natural erosion or deliberate carvings is hard to tell. The stone floor is smooth and wet, leading into darkness. The air carries a strange mix of salt and something sweeter, almost musical.",
+            choices: [
+                { text: "Enter the main cave", nextScene: "main_sea_cave" },
+                { text: "Listen for unusual sounds", nextScene: "sea_cave_listen" }
+            ]
+        },
+        sea_cave_listen: {
+            text: "You stand still, focusing on sounds. Beyond the ocean's rhythm, you detect a faint melody—like distant voices singing in harmony. The sound seems to come from deeper within the cave system.",
+            choices: [
+                { text: "Follow the mysterious music", nextScene: "follow_cave_music" },
+                { text: "Explore the main cave first", nextScene: "main_sea_cave" }
+            ]
+        },
+
+            // SEA CAVE PATHS
+        follow_cave_music: {
+            text: "You follow the haunting melody deeper into the cave system. The passage narrows, then widens into a chamber where the ceiling is open to the sky—a natural chimney letting in a shaft of light. The music grows stronger, though you still see no source.",
+            choices: [
+                { text: "Continue following the music", nextScene: "cave_music_source" },
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ]
+        },
+        cave_music_source: {
+            text: "The passage opens into a small grotto partially filled with seawater. On a rock in the center sits a small silver harp, no larger than your hand. As you watch, it plays itself, strings moving as if plucked by invisible fingers. The melody is hauntingly beautiful.",
+            choices: [
+                { text: "Approach the tiny harp", nextScene: "miniature_harp" },
+                { text: "Observe from a distance", nextScene: "observe_harp" }
+            ]
+        },
+        miniature_harp: {
+            text: "As you approach, the music stops. The miniature harp seems ordinary now—just a beautifully crafted silver trinket. When you touch it, however, a final note rings out, and a voice speaks in your mind: 'Seek the original, if you dare. This is but an echo.' The tiny harp crumbles to dust, leaving behind a single silver string.",
+            item: "Silver Harp String",
+            choices: [
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ],
+            consequenceText: "You found a Silver Harp String!"
+        },
+        observe_harp: {
+            text: "You watch the self-playing harp from the entrance. Its melody changes, becoming almost questioning. The water in the grotto ripples in patterns matching the rhythm. Suddenly, a sleek head emerges from the water—a seal with unnaturally intelligent eyes. It watches you for a moment before disappearing again beneath the surface.",
+            choices: [
+                { text: "Approach the harp now", nextScene: "miniature_harp" },
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ]
+        },
+        deep_sea_passage: {
+            text: "The narrow passage descends, twisting deeper into the cliff. The walls glisten with moisture, and the air grows noticeably cooler. The distant roar of the tide echoes ominously—a reminder that these caves flood completely at high tide.",
+            choices: [
+                { text: "Continue deeper", nextScene: "underground_pool" },
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ]
+        },
+        underground_pool: {
+            text: "The passage opens into a chamber dominated by a still, dark pool. The water is crystal clear despite its depth, and far below, you can make out what might be underwater passages. Strange symbols are carved into the rocks surrounding the pool.",
+            choices: [
+                { text: "Examine the symbols", nextScene: "pool_symbols" },
+                { text: "Test the water", nextScene: "test_pool_water" },
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ]
+        },
+        pool_symbols: {
+            text: "The symbols appear ancient—spirals, waves, and what might be musical notation of some kind. One sequence shows a figure diving into water while holding what could be a harp, emerging on the other side in a place filled with strange structures.",
+            choices: [
+                { text: "Test the water", nextScene: "test_pool_water" },
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ]
+        },
+        test_pool_water: {
+            text: "You touch the water—it's surprisingly warm and seems to tingle against your skin. As ripples spread from your touch, they form patterns similar to the symbols on the walls. For a moment, you think you see faces looking up at you from the depths, but they vanish when you try to focus on them.",
+            choices: [
+                { text: "Play music near the pool (if you have an instrument)", nextScene: "play_for_pool", requires: "Coral Flute" },
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ]
+        },
+        play_for_pool: {
+            text: "You play the Coral Flute beside the underground pool. The notes seem to hang in the air longer than they should, resonating with the water itself. The pool's surface ripples in patterns matching your melody, and for a moment, the water level drops, revealing a small alcove in the pool wall that was previously submerged. Inside is a small object that glints silver.",
+            choices: [
+                { text: "Reach for the object quickly", nextScene: "pool_artifact" },
+                { text: "Stop playing and reconsider", nextScene: "underground_pool" }
+            ]
+        },
+        pool_artifact: {
+            text: "You grab the object just as the water begins to rise again. It's a small brooch shaped like a harp, crafted from some silvery metal that seems to shift under your gaze. It feels strangely warm in your palm.",
+            item: "Tidal Brooch",
+            choices: [
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ],
+            consequenceText: "You found a Tidal Brooch!"
+        },
+        side_sea_cave: {
+            text: "You squeeze through the narrow opening into a small chamber filled with unusual formations—stone columns that seem to have been deliberately arranged. In the center is a shallow basin filled with clear water.",
+            choices: [
+                { text: "Examine the basin", nextScene: "sea_cave_basin" },
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ]
+        },
+        sea_cave_basin: {
+            text: "The basin appears to be carved from a single piece of stone. Its inner surface is inscribed with tiny symbols that spiral toward the center. The water it contains is unnaturally still, not rippling even when you move nearby.",
+            choices: [
+                { text: "Touch the water", nextScene: "touch_basin_water" },
+                { text: "Place an offering in the basin (if you have something suitable)", nextScene: "basin_offering_check" },
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ]
+        },
+        basin_offering_check: {
+            text: "You consider what might be an appropriate offering for this strange basin. Something connected to water or music would seem fitting.",
+            choices: [
+                { text: "Offer the Songpearl (if you have it)", nextScene: "offer_songpearl", requires: "Songpearl" },
+                { text: "Offer the Ocean Tear Pendant (if you have it)", nextScene: "offer_pendant", requires: "Ocean Tear Pendant" },
+                { text: "Reconsider and touch the water instead", nextScene: "touch_basin_water" },
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ]
+        },
+        offer_songpearl: {
+            text: "You place the Songpearl in the basin. It floats on the surface, spinning slowly while emitting a soft glow. The water begins to spiral around it, and the pearl dissolves, turning the water luminescent. From the glowing liquid rises a small crystal vial.",
+            item: "Essence of Song",
+            removeItem: "Songpearl",
+            choices: [
+                { text: "Take the crystal vial", nextScene: "main_sea_cave" }
+            ],
+            consequenceText: "The Songpearl transformed into Essence of Song!"
+        },
+        offer_pendant: {
+            text: "You place the Ocean Tear Pendant in the basin. It sinks to the bottom, where it pulses with blue light. The water begins to swirl, and the pendant dissolves. In its place, the water forms a perfect sphere that rises to hover before you. When you take it, it solidifies into a crystal orb.",
+            item: "Sea Memory Orb",
+            removeItem: "Ocean Tear Pendant",
+            choices: [
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ],
+            consequenceText: "The Ocean Tear Pendant transformed into a Sea Memory Orb!"
+        },
+        touch_basin_water: {
+            text: "When your finger touches the water, ripples spread in a perfect circular pattern. A vision flashes in your mind—a waterfall viewed from behind, a barrier of light, and music that parts the waters. The vision fades, leaving you with a sense of purpose.",
+            choices: [
+                { text: "Return to the main cave", nextScene: "main_sea_cave" }
+            ]
+        },
+        main_sea_cave: {
+            text: "The main chamber is surprisingly large, with a high ceiling where faint light filters through cracks. Tide pools dot the uneven floor, and colorful minerals streak the walls. A narrow passage leads deeper, while another smaller opening to your right requires squeezing through.",
+            choices: [
+                { text: "Take the narrow passage deeper", nextScene: "deep_sea_passage" },
+                { text: "Investigate the smaller side opening", nextScene: "side_sea_cave" },
+                { text: "Examine the tide pools", nextScene: "cave_tide_pools" }
+            ]
+        },
+        cave_tide_pools: {
+            text: "These pools are unlike those outside—the water glows with a faint blue luminescence. Small creatures dart away as your shadow falls across them. In one pool, you notice a perfect pearl unlike any you've seen—its surface swirls with changing colors.",
+            choices: [
+                { text: "Take the strange pearl", nextScene: "take_sea_pearl" },
+                { text: "Leave it and explore the deeper passage", nextScene: "deep_sea_passage" },
+                { text: "Leave it and check the side cave", nextScene: "side_sea_cave" }
+            ]
+        },
+        take_sea_pearl: {
+            text: "The moment your fingers touch the pearl, it pulses with light. A sense of calm washes over you, along with fleeting images of deep ocean realms no human has seen. The pearl feels alive somehow, warm against your palm.",
+            item: "Songpearl",
+            choices: [
+                { text: "Explore the deeper passage", nextScene: "deep_sea_passage" },
+                { text: "Check the side cave", nextScene: "side_sea_cave" }
+            ],
+            consequenceText: "You found a magical Songpearl!"
+        },
+        
+        // === ENHANCED WATERFALL AND MULTIPLE ENDINGS ===
+        cave_entrance: {
+            text: "The cave is damp and echoes with the waterfall's roar. A pedestal stands in the center. Upon it rests a legendary artifact: The Harp of Ages, said to hold the music of the land itself. But as you approach, a shimmer appears in the air—a barrier of magic.",
+            choices: [
+                { text: "Test the barrier with your hand", nextScene: "barrier_test" },
+                { text: "Play the Silver Flute (if you have it)", nextScene: "flute_barrier", requires: "Silver Flute" },
+                { text: "Play the Coral Flute (if you have it)", nextScene: "coral_flute_barrier", requires: "Coral Flute" },
+                { text: "Ring the Faerie Bell (if you have it)", nextScene: "bell_barrier", requires: "Faerie Bell" },
+                { text: "Wear the Ocean Tear Pendant (if you have it)", nextScene: "pendant_barrier", requires: "Ocean Tear Pendant" },
+                { text: "Hold up the Songpearl (if you have it)", nextScene: "songpearl_barrier", requires: "Songpearl" },
+                { text: "Wear the Clover Amulet (if you have it)", nextScene: "amulet_barrier", requires: "Clover Amulet" }
+            ]
+        },
+        barrier_test: {
+            text: "Your hand meets resistance, like pushing against thick glass. The barrier ripples with blue energy at your touch. A voice echoes: 'Only those blessed or proven worthy may claim the Harp of Ages.'",
+            choices: [
+                { text: "Step back and consider your options", nextScene: "cave_entrance" },
+                { text: "Leave the cave and seek more knowledge", nextScene: "final_path_waterfall" }
+            ]
+        },
+        flute_barrier: {
+            text: "You play the flute, its melody resonating with the cave walls. The barrier flickers and weakens, but does not fall completely. The hermit's gift has helped, but isn't enough on its own.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "final_path_waterfall" }
+            ]
+        },
+        coral_flute_barrier: {
+            text: "The Coral Flute's notes carry the rhythm of waves. The barrier responds strongly, its blue energy swirling like a whirlpool. It thins considerably but remains intact. The selkie's gift holds significant power here.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "final_path_waterfall" }
+            ]
+        },
+        bell_barrier: {
+            text: "The Faerie Bell's clear tone makes the barrier shimmer like morning dew. The magic responds to the fae influence, becoming more permeable. It's weakened, but not completely dispelled.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "final_path_waterfall" }
+            ]
+        },
+        pendant_barrier: {
+            text: "The Ocean Tear Pendant glows against your chest. The waterfall's roar seems to change pitch, becoming almost musical. The barrier thins where water droplets pass through it, creating small openings that quickly close again.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "final_path_waterfall" }
+            ]
+        },
+        songpearl_barrier: {
+            text: "The Songpearl pulses in your hand, its colors synchronizing with the barrier's energy. The shield becomes translucent where the pearl touches it, allowing your hand to pass through briefly before sealing again.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "final_path_waterfall" }
+            ]
+        },
+        amulet_barrier: {
+            text: "The Clover Amulet warms against your skin. The barrier develops a green tinge and seems to recognize the druidic magic, creating a small gap that quickly seals itself.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "final_path_waterfall" }
+            ]
+        },
+        // COMBINATION SCENARIOS - These check for multiple items
+        flute_bell_combo: {
+            text: "As the Silver Flute's melody hangs in the air, you ring the Faerie Bell. The two magical sounds intertwine, creating harmony that makes the barrier fluctuate wildly. A gap forms, stable enough to pass through!",
+            choices: [
+                { text: "Step through to the Harp", nextScene: "harp_musician_approach" }
+            ]
+        },
+        coral_pendant_combo: {
+            text: "Wearing the Ocean Tear Pendant, you play the Coral Flute. The cave fills with the music of the sea. The waterfall itself seems to respond, its droplets forming a path through the barrier that remains open!", 
+            choices: [
+                { text: "Follow the water path to the Harp", nextScene: "harp_guardian_approach" }
+            ]
+        },
+        songpearl_pendant_combo: {
+            text: "You hold the Songpearl in one hand while touching the Ocean Tear Pendant with the other. Both artifacts glow with intense blue-green light. The barrier parts like a curtain, revealing the way to the Harp!",
+            choices: [
+                { text: "Approach the Harp", nextScene: "harp_sea_approach" }
+            ]
+        },
+        amulet_bell_combo: {
+            text: "The Clover Amulet at your neck, you ring the Faerie Bell. The barrier swirls with a mixture of green and silver energy, recognizing the combined magic of land and fae. A doorway shapes itself in the barrier!",
+            choices: [
+                { text: "Step through to the Harp", nextScene: "harp_nature_approach" }
+            ]
+        },
+        druid_blessing_approach: {
+            text: "With the full blessing of the ancient druidic knowledge and your collected magical items, the barrier recognizes you as a worthy successor to the old traditions. It dissolves completely, acknowledging your right to approach.",
+            choices: [
+                { text: "Approach the Harp with reverence", nextScene: "harp_druid_approach" }
+            ]
+        },
+        triple_item_approach: {
+            text: "The combined power of your three magical artifacts resonates in perfect harmony. The barrier doesn't just open—it transforms into shimmering motes of light that surround you like a blessing as you walk forward.",
+            choices: [
+                { text: "Approach the Harp of Ages", nextScene: "harp_mastery_approach" }
+            ]
+        },
+        
+        // DIFFERENT APPROACHES TO THE HARP - Lead to different endings
+        harp_musician_approach: {
+            text: "You approach the Harp as a musician seeking its melodies. The ancient instrument seems to respond to your presence, its strings vibrating softly though no hand touches them. You sense that its music is its true power, not the artifact itself.",
+            choices: [
+                { text: "Take the Harp to share its music with the world", nextScene: "ending_musician" },
+                { text: "Play the Harp here in its sacred place", nextScene: "play_harp_musician" }
+            ]
+        },
+        harp_guardian_approach: {
+            text: "You approach as one blessed by the sea. The Harp's silver gleams like moonlight on water, and you feel that it is both an instrument and a key—a connection between worlds that must be protected as much as played.",
+            choices: [
+                { text: "Take the Harp as its new guardian", nextScene: "ending_guardian" },
+                { text: "Play the Harp to honor its power", nextScene: "play_harp_guardian" }
+            ]
+        },
+        harp_sea_approach: {
+            text: "With the blessing of the sea folk upon you, you approach the Harp. Its frame resembles flowing water frozen in silver, its strings like rays of sunlight through ocean depths. You understand now why the selkies revere it.",
+            choices: [
+                { text: "Take the Harp to bridge the world of land and sea", nextScene: "ending_bridge" },
+                { text: "Play the Harp to honor the sea", nextScene: "play_harp_sea" }
+            ]
+        },
+        harp_nature_approach: {
+            text: "Blessed by both the faerie folk and druidic magic, you approach the Harp as a champion of the natural world. The instrument seems alive in its own way, a conduit for the voice of the land itself.",
+            choices: [
+                { text: "Take the Harp to restore harmony to troubled lands", nextScene: "ending_harmony" },
+                { text: "Play the Harp to communicate with the spirit of Ireland", nextScene: "play_harp_nature" }
+            ]
+        },
+        harp_druid_approach: {
+            text: "You approach as a true heir to the druidic traditions. The Harp recognizes the ancient knowledge you carry. This is no mere treasure hunt for you, but a sacred duty to preserve the old magic in a changing world.",
+            choices: [
+                { text: "Take the Harp to safeguard ancient wisdom", nextScene: "ending_wisdom" },
+                { text: "Play the Harp to commune with ancient spirits", nextScene: "play_harp_druid" }
+            ]
+        },
+        harp_mastery_approach: {
+            text: "Having gathered powerful artifacts from across the magical spectrum of Ireland, you approach the Harp as a master of many traditions. The instrument glows with recognition, its frame shifting slightly to match your unique magical resonance.",
+            choices: [
+                { text: "Take the Harp as the culmination of your quest", nextScene: "ending_mastery" },
+                { text: "Play the Harp with your complete knowledge", nextScene: "play_harp_mastery" }
+            ]
+        },
+        
+        // PLAYING THE HARP - Each leads to a related ending
+        play_harp_musician: {
+            text: "Your fingers draw music from the Harp that surprises even you—melodies that speak of joy and sorrow, triumph and loss, love and longing. The cave itself seems to listen, and for a moment, you glimpse visions of how this music could touch hearts across Ireland.",
+            choices: [
+                { text: "Take the Harp to share its music with the world", nextScene: "ending_musician" }
+            ]
+        },
+        play_harp_guardian: {
+            text: "The notes you play echo with protection and vigilance. The Harp responds to your touch with music that strengthens and guards. You sense ancient promises being renewed through your fingers—oaths to preserve balance between worlds.",
+            choices: [
+                { text: "Accept your role as the Harp's guardian", nextScene: "ending_guardian" }
+            ]
+        },
+        play_harp_sea: {
+            text: "The music flows like water through your fingers—sometimes gentle as a tide pool, sometimes powerful as a storm surge. You hear echoes of selkie songs and the deep rhythms of the ocean floor. This Harp truly does bridge realms.",
+            choices: [
+                { text: "Take the Harp to unite land and sea", nextScene: "ending_bridge" }
+            ]
+        },
+        play_harp_nature: {
+            text: "Your playing awakens harmonies of growth and renewal. Each note seems to connect with the living essence of Ireland—its forests and glens, its mountains and meadows. The Harp sings of balance restored and wounds healed.",
+            choices: [
+                { text: "Take the Harp to heal the land", nextScene: "ending_harmony" }
+            ]
+        },
+        play_harp_druid: {
+            text: "Ancient knowledge guides your fingers across the strings. The music speaks of mysteries preserved and wisdom passed through generations. You feel connected to countless druids before you who safeguarded Ireland's spiritual heritage.",
+            choices: [
+                { text: "Take the Harp to preserve ancient wisdom", nextScene: "ending_wisdom" }
+            ]
+        },
+        play_harp_mastery: {
+            text: "Drawing on all you've learned, you play with unprecedented skill and insight. The Harp responds with music beyond imagination—a perfect synthesis of traditions. In this moment, you understand how all magical paths in Ireland intertwine as one.",
+            choices: [
+                { text: "Take the Harp as the true Master of Irish Magic", nextScene: "ending_mastery" }
+            ]
+        },
+        
+        // MULTIPLE ENDINGS
+        ending_musician: {
+            text: "You emerge from behind the waterfall, the Harp of Ages in your hands. Its music has awakened something within you—a gift for melody and story that transcends ordinary skill. In the years to come, your music will bring joy to countless hearts, preserving Ireland's soul in song. Bards will speak of your performances for generations, never knowing the true source of your inspiration.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
+        ending_guardian: {
+            text: "With the Harp in your possession, you accept the mantle of its guardian. You find yourself drawn to a life between worlds—sometimes in villages sharing select melodies, other times in forgotten places playing songs that maintain ancient boundaries. The years touch you lightly as you walk this twilight path, recognized by the Fair Folk and sea people as one who keeps the old promises.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
+        ending_bridge: {
+            text: "The Harp becomes your key to both worlds. The selkies accept you as kin-of-heart if not of blood. Under moonlight, you play at the shore's edge, and those with sealskins dance in human form. Your music creates understanding between the people of land and sea, preventing conflicts and fostering alliances that will protect the coast for centuries to come.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
+        ending_harmony: {
+            text: "With the Harp's power, you become a healer of the land. Where you travel, crops grow fuller, forests rejuvenate, and the natural balance strengthens. The Fair Folk and humans alike welcome your arrival in troubled places. Children tell stories of the magical harper who can make flowers bloom with a song and calm storms with a melody.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
+        ending_wisdom: {
+            text: "The Harp becomes your tool for preserving ancient knowledge. Its music helps you recover forgotten spells and rituals, which you carefully document and share with worthy students. You establish a new order of druids for the modern age, adapting timeless wisdom to changing times while keeping the essence pure.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
+        ending_mastery: {
+            text: "As master of Ireland's magical traditions, you and the Harp become legendary. Your comprehensive understanding allows you to mediate between different magical communities—selkies, faeries, druids, and ordinary folk with the gift. You become a figure of unity and progress, using the Harp to forge a harmonious future while honoring the diverse paths of the past.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
         }; // End of story object
 
         // --- Global Game State ---
