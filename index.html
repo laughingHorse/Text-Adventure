@@ -212,7 +212,643 @@
                 ]
             },
             leprechaun_explore: {
-                text: "'Just explorin', eh?' He squints. 'Well, be careful. These woods ain't always friendly to outsiders. Stick to the paths, and don't meddle with things that ain't yours.'",
+                text: "'Just explorin', eh?' He squints. 'Well, be careful. These pools are unlike those outside—the water glows with a faint blue luminescence. Small creatures dart away as your shadow falls across them. In one pool, you notice a perfect pearl unlike any you've seen—its surface swirls with changing colors.",
+            choices: [
+                { text: "Take the strange pearl", nextScene: "take_sea_pearl" },
+                { text: "Leave it and explore the deeper passage", nextScene: "deep_sea_passage" },
+                { text: "Leave it and check the side cave", nextScene: "side_sea_cave" },
+                { text: "Return to the main part of the cave", nextScene: "main_sea_cave" }
+            ]
+        },
+        take_sea_pearl: {
+            text: "The moment your fingers touch the pearl, it pulses with light. A sense of calm washes over you, along with fleeting images of deep ocean realms no human has seen. The pearl feels alive somehow, warm against your palm.",
+            item: "Songpearl",
+            choices: [
+                { text: "Explore the deeper passage", nextScene: "deep_sea_passage" },
+                { text: "Check the side cave", nextScene: "side_sea_cave" },
+                { text: "Return to the main part of the cave", nextScene: "main_sea_cave" }
+            ],
+            consequenceText: "You found a magical Songpearl!"
+        },
+        
+        // === ENHANCED WATERFALL AND MULTIPLE ENDINGS ===
+        cave_entrance: {
+            text: "The cave is damp and echoes with the waterfall's roar. A pedestal stands in the center. Upon it rests a legendary artifact: The Harp of Ages, said to hold the music of the land itself. But as you approach, a shimmer appears in the air—a barrier of magic.",
+            // Custom logic for combination choices handled in renderScene() function
+            choices: [
+                { text: "Test the barrier with your hand", nextScene: "barrier_test" },
+                { text: "Play the Silver Flute (if you have it)", nextScene: "flute_barrier", requires: "Silver Flute" },
+                { text: "Play the Coral Flute (if you have it)", nextScene: "coral_flute_barrier", requires: "Coral Flute" },
+                { text: "Ring the Faerie Bell (if you have it)", nextScene: "bell_barrier", requires: "Faerie Bell" },
+                { text: "Wear the Ocean Tear Pendant (if you have it)", nextScene: "pendant_barrier", requires: "Ocean Tear Pendant" },
+                { text: "Hold up the Songpearl (if you have it)", nextScene: "songpearl_barrier", requires: "Songpearl" },
+                { text: "Wear the Clover Amulet (if you have it)", nextScene: "amulet_barrier", requires: "Clover Amulet" },
+                { text: "Return to the waterfall", nextScene: "final_path_waterfall" }
+            ]
+        },
+        barrier_test: {
+            text: "Your hand meets resistance, like pushing against thick glass. The barrier ripples with blue energy at your touch. A voice echoes: 'Only those blessed or proven worthy may claim the Harp of Ages.'",
+            choices: [
+                { text: "Step back and consider your options", nextScene: "cave_entrance" },
+                { text: "Leave the cave and seek more knowledge", nextScene: "final_path_waterfall" }
+            ]
+        },
+        flute_barrier: {
+            text: "You play the flute, its melody resonating with the cave walls. The barrier flickers and weakens, but does not fall completely. The hermit's gift has helped, but isn't enough on its own.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "adventure_hub" }
+            ]
+        },
+        coral_flute_barrier: {
+            text: "The Coral Flute's notes carry the rhythm of waves. The barrier responds strongly, its blue energy swirling like a whirlpool. It thins considerably but remains intact. The selkie's gift holds significant power here.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "adventure_hub" }
+            ]
+        },
+        bell_barrier: {
+            text: "The Faerie Bell's clear tone makes the barrier shimmer like morning dew. The magic responds to the fae influence, becoming more permeable. It's weakened, but not completely dispelled.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "adventure_hub" }
+            ]
+        },
+        pendant_barrier: {
+            text: "The Ocean Tear Pendant glows against your chest. The waterfall's roar seems to change pitch, becoming almost musical. The barrier thins where water droplets pass through it, creating small openings that quickly close again.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "adventure_hub" }
+            ]
+        },
+        songpearl_barrier: {
+            text: "The Songpearl pulses in your hand, its colors synchronizing with the barrier's energy. The shield becomes translucent where the pearl touches it, allowing your hand to pass through briefly before sealing again.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "adventure_hub" }
+            ]
+        },
+        amulet_barrier: {
+            text: "The Clover Amulet warms against your skin. The barrier develops a green tinge and seems to recognize the druidic magic, creating a small gap that quickly seals itself.",
+            choices: [
+                { text: "Try combining with other items you have", nextScene: "cave_entrance" },
+                { text: "Leave and seek more magical items", nextScene: "adventure_hub" }
+            ]
+        },
+        // COMBINATION SCENARIOS - These check for multiple items
+        flute_bell_combo: {
+            text: "As the Silver Flute's melody hangs in the air, you ring the Faerie Bell. The two magical sounds intertwine, creating harmony that makes the barrier fluctuate wildly. A gap forms, stable enough to pass through!",
+            choices: [
+                { text: "Step through to the Harp", nextScene: "harp_musician_approach" }
+            ]
+        },
+        coral_pendant_combo: {
+            text: "Wearing the Ocean Tear Pendant, you play the Coral Flute. The cave fills with the music of the sea. The waterfall itself seems to respond, its droplets forming a path through the barrier that remains open!", 
+            choices: [
+                { text: "Follow the water path to the Harp", nextScene: "harp_guardian_approach" }
+            ]
+        },
+        songpearl_pendant_combo: {
+            text: "You hold the Songpearl in one hand while touching the Ocean Tear Pendant with the other. Both artifacts glow with intense blue-green light. The barrier parts like a curtain, revealing the way to the Harp!",
+            choices: [
+                { text: "Approach the Harp", nextScene: "harp_sea_approach" }
+            ]
+        },
+        amulet_bell_combo: {
+            text: "The Clover Amulet at your neck, you ring the Faerie Bell. The barrier swirls with a mixture of green and silver energy, recognizing the combined magic of land and fae. A doorway shapes itself in the barrier!",
+            choices: [
+                { text: "Step through to the Harp", nextScene: "harp_nature_approach" }
+            ]
+        },
+        druid_blessing_approach: {
+            text: "With the full blessing of the ancient druidic knowledge and your collected magical items, the barrier recognizes you as a worthy successor to the old traditions. It dissolves completely, acknowledging your right to approach.",
+            choices: [
+                { text: "Approach the Harp with reverence", nextScene: "harp_druid_approach" }
+            ]
+        },
+        triple_item_approach: {
+            text: "The combined power of your three magical artifacts resonates in perfect harmony. The barrier doesn't just open—it transforms into shimmering motes of light that surround you like a blessing as you walk forward.",
+            choices: [
+                { text: "Approach the Harp of Ages", nextScene: "harp_mastery_approach" }
+            ]
+        },
+        
+        // DIFFERENT APPROACHES TO THE HARP - Lead to different endings
+        harp_musician_approach: {
+            text: "You approach the Harp as a musician seeking its melodies. The ancient instrument seems to respond to your presence, its strings vibrating softly though no hand touches them. You sense that its music is its true power, not the artifact itself.",
+            choices: [
+                { text: "Take the Harp to share its music with the world", nextScene: "ending_musician" },
+                { text: "Play the Harp here in its sacred place", nextScene: "play_harp_musician" }
+            ]
+        },
+        harp_guardian_approach: {
+            text: "You approach as one blessed by the sea. The Harp's silver gleams like moonlight on water, and you feel that it is both an instrument and a key—a connection between worlds that must be protected as much as played.",
+            choices: [
+                { text: "Take the Harp as its new guardian", nextScene: "ending_guardian" },
+                { text: "Play the Harp to honor its power", nextScene: "play_harp_guardian" }
+            ]
+        },
+        harp_sea_approach: {
+            text: "With the blessing of the sea folk upon you, you approach the Harp. Its frame resembles flowing water frozen in silver, its strings like rays of sunlight through ocean depths. You understand now why the selkies revere it.",
+            choices: [
+                { text: "Take the Harp to bridge the world of land and sea", nextScene: "ending_bridge" },
+                { text: "Play the Harp to honor the sea", nextScene: "play_harp_sea" }
+            ]
+        },
+        harp_nature_approach: {
+            text: "Blessed by both the faerie folk and druidic magic, you approach the Harp as a champion of the natural world. The instrument seems alive in its own way, a conduit for the voice of the land itself.",
+            choices: [
+                { text: "Take the Harp to restore harmony to troubled lands", nextScene: "ending_harmony" },
+                { text: "Play the Harp to communicate with the spirit of Ireland", nextScene: "play_harp_nature" }
+            ]
+        },
+        harp_druid_approach: {
+            text: "You approach as a true heir to the druidic traditions. The Harp recognizes the ancient knowledge you carry. This is no mere treasure hunt for you, but a sacred duty to preserve the old magic in a changing world.",
+            choices: [
+                { text: "Take the Harp to safeguard ancient wisdom", nextScene: "ending_wisdom" },
+                { text: "Play the Harp to commune with ancient spirits", nextScene: "play_harp_druid" }
+            ]
+        },
+        harp_mastery_approach: {
+            text: "Having gathered powerful artifacts from across the magical spectrum of Ireland, you approach the Harp as a master of many traditions. The instrument glows with recognition, its frame shifting slightly to match your unique magical resonance.",
+            choices: [
+                { text: "Take the Harp as the culmination of your quest", nextScene: "ending_mastery" },
+                { text: "Play the Harp with your complete knowledge", nextScene: "play_harp_mastery" }
+            ]
+        },
+        
+        // PLAYING THE HARP - Each leads to a related ending
+        play_harp_musician: {
+            text: "Your fingers draw music from the Harp that surprises even you—melodies that speak of joy and sorrow, triumph and loss, love and longing. The cave itself seems to listen, and for a moment, you glimpse visions of how this music could touch hearts across Ireland.",
+            choices: [
+                { text: "Take the Harp to share its music with the world", nextScene: "ending_musician" }
+            ]
+        },
+        play_harp_guardian: {
+            text: "The notes you play echo with protection and vigilance. The Harp responds to your touch with music that strengthens and guards. You sense ancient promises being renewed through your fingers—oaths to preserve balance between worlds.",
+            choices: [
+                { text: "Accept your role as the Harp's guardian", nextScene: "ending_guardian" }
+            ]
+        },
+        play_harp_sea: {
+            text: "The music flows like water through your fingers—sometimes gentle as a tide pool, sometimes powerful as a storm surge. You hear echoes of selkie songs and the deep rhythms of the ocean floor. This Harp truly does bridge realms.",
+            choices: [
+                { text: "Take the Harp to unite land and sea", nextScene: "ending_bridge" }
+            ]
+        },
+        play_harp_nature: {
+            text: "Your playing awakens harmonies of growth and renewal. Each note seems to connect with the living essence of Ireland—its forests and glens, its mountains and meadows. The Harp sings of balance restored and wounds healed.",
+            choices: [
+                { text: "Take the Harp to heal the land", nextScene: "ending_harmony" }
+            ]
+        },
+        play_harp_druid: {
+            text: "Ancient knowledge guides your fingers across the strings. The music speaks of mysteries preserved and wisdom passed through generations. You feel connected to countless druids before you who safeguarded Ireland's spiritual heritage.",
+            choices: [
+                { text: "Take the Harp to preserve ancient wisdom", nextScene: "ending_wisdom" }
+            ]
+        },
+        play_harp_mastery: {
+            text: "Drawing on all you've learned, you play with unprecedented skill and insight. The Harp responds with music beyond imagination—a perfect synthesis of traditions. In this moment, you understand how all magical paths in Ireland intertwine as one.",
+            choices: [
+                { text: "Take the Harp as the true Master of Irish Magic", nextScene: "ending_mastery" }
+            ]
+        },
+        
+        // MULTIPLE ENDINGS
+        ending_musician: {
+            text: "You emerge from behind the waterfall, the Harp of Ages in your hands. Its music has awakened something within you—a gift for melody and story that transcends ordinary skill. In the years to come, your music will bring joy to countless hearts, preserving Ireland's soul in song. Bards will speak of your performances for generations, never knowing the true source of your inspiration.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
+        ending_guardian: {
+            text: "With the Harp in your possession, you accept the mantle of its guardian. You find yourself drawn to a life between worlds—sometimes in villages sharing select melodies, other times in forgotten places playing songs that maintain ancient boundaries. The years touch you lightly as you walk this twilight path, recognized by the Fair Folk and sea people as one who keeps the old promises.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
+        ending_bridge: {
+            text: "The Harp becomes your key to both worlds. The selkies accept you as kin-of-heart if not of blood. Under moonlight, you play at the shore's edge, and those with sealskins dance in human form. Your music creates understanding between the people of land and sea, preventing conflicts and fostering alliances that will protect the coast for centuries to come.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
+        ending_harmony: {
+            text: "With the Harp's power, you become a healer of the land. Where you travel, crops grow fuller, forests rejuvenate, and the natural balance strengthens. The Fair Folk and humans alike welcome your arrival in troubled places. Children tell stories of the magical harper who can make flowers bloom with a song and calm storms with a melody.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
+        ending_wisdom: {
+            text: "The Harp becomes your tool for preserving ancient knowledge. Its music helps you recover forgotten spells and rituals, which you carefully document and share with worthy students. You establish a new order of druids for the modern age, adapting timeless wisdom to changing times while keeping the essence pure.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
+        ending_mastery: {
+            text: "As master of Ireland's magical traditions, you and the Harp become legendary. Your comprehensive understanding allows you to mediate between different magical communities—selkies, faeries, druids, and ordinary folk with the gift. You become a figure of unity and progress, using the Harp to forge a harmonious future while honoring the diverse paths of the past.",
+            consequence: "gameWin",
+            choices: [
+                { text: "Play Again?", nextScene: "start", isRestart: true }
+            ]
+        },
+        }; // End of story object
+
+        // --- Global Game State ---
+        let currentScene = 'start';
+        let inventory = [];
+        let debugLog = [];
+        let navigationHistory = []; // To track where the player has been
+
+        // --- DOM Element References ---
+        // These will be assigned once the DOM is loaded, inside window.onload
+        let storyTextElement, choicesContainerElement, inventoryElement, inventoryItemsElement, messageBoxElement, debugPanelElement;
+
+        console.log("Global variables declared.");
+
+        // --- Core Functions ---
+        function logDebug(message) {
+            if (!DEBUG_MODE) return;
+            
+            debugLog.push(`${new Date().toISOString().substr(11, 8)}: ${message}`);
+            if (debugLog.length > 20) debugLog.shift(); // Keep only last 20 entries
+            
+            if (debugPanelElement) {
+                debugPanelElement.innerHTML = debugLog.join('<br>');
+                debugPanelElement.style.display = 'block';
+            }
+            
+            console.log(`[DEBUG] ${message}`);
+        }
+
+        function showMessage(message, duration = 3000) {
+            if (!messageBoxElement) { // Guard clause
+                console.error("showMessage called before messageBoxElement is initialized.");
+                return;
+            }
+            messageBoxElement.textContent = message;
+            messageBoxElement.style.display = 'block';
+            setTimeout(() => {
+                messageBoxElement.style.display = 'none';
+            }, duration);
+        }
+
+        function updateInventoryDisplay() {
+            if (!inventoryItemsElement || !inventoryElement) { // Guard clause
+                console.error("updateInventoryDisplay called before inventory elements are initialized.");
+                return;
+            }
+            if (inventory.length === 0) {
+                inventoryItemsElement.textContent = "Empty";
+                inventoryElement.style.display = 'none';
+            } else {
+                inventoryItemsElement.textContent = inventory.join(", ");
+                inventoryElement.style.display = 'block';
+            }
+        }
+
+        // This is the function to check for item combinations
+        function checkItemCombinations() {
+            logDebug("Checking for item combinations...");
+            
+            // For cave_entrance scene, check for special item combinations
+            if (currentScene === "cave_entrance") {
+                logDebug(`Current inventory: ${inventory.join(", ")}`);
+                
+                // Check for different combinations of items
+                const hasFlute = inventory.includes("Silver Flute");
+                const hasCoralFlute = inventory.includes("Coral Flute");
+                const hasBell = inventory.includes("Faerie Bell");
+                const hasPendant = inventory.includes("Ocean Tear Pendant");
+                const hasSongpearl = inventory.includes("Songpearl");
+                const hasAmulet = inventory.includes("Clover Amulet");
+                const hasDruidicKnowledge = inventory.includes("Druidic Knowledge");
+                
+                // Check for the most powerful combination first - the "druid blessing"
+                if (hasDruidicKnowledge && hasAmulet && hasBell) {
+                    logDebug("Found druid blessing combination!");
+                    return "druid_blessing_approach";
+                }
+                
+                // Check for triple item combination (any 3 or more items would qualify)
+                const magicalItemCount = [hasFlute, hasCoralFlute, hasBell, hasPendant, hasSongpearl, hasAmulet].filter(Boolean).length;
+                if (magicalItemCount >= 3) {
+                    logDebug("Found triple item combination!");
+                    return "triple_item_approach";
+                }
+                
+                // Check for specific dual combinations
+                if (hasFlute && hasBell) {
+                    logDebug("Found flute + bell combination!");
+                    return "flute_bell_combo";
+                }
+                
+                if (hasCoralFlute && hasPendant) {
+                    logDebug("Found coral flute + pendant combination!");
+                    return "coral_pendant_combo";
+                }
+                
+                if (hasSongpearl && hasPendant) {
+                    logDebug("Found songpearl + pendant combination!");
+                    return "songpearl_pendant_combo";
+                }
+                
+                if (hasAmulet && hasBell) {
+                    logDebug("Found amulet + bell combination!");
+                    return "amulet_bell_combo";
+                }
+            }
+            
+            // No special combination found
+            return null;
+        }
+
+        function renderScene() {
+            logDebug(`Rendering scene: ${currentScene}`);
+            
+            if (!storyTextElement || !choicesContainerElement) { // Guard clause
+                console.error("renderScene called before essential DOM elements are initialized.");
+                // Check if storyTextElement itself is null before trying to set its innerHTML
+                if (storyTextElement) {
+                    storyTextElement.innerHTML = "Error: Game elements not ready. Please refresh.";
+                } else {
+                    // Fallback if storyTextElement is also null, perhaps alert or log to body
+                     document.body.insertAdjacentHTML('afterbegin', '<div style="color:red; padding: 20px; text-align:center;">Critical Error: Game display area not found.</div>');
+                }
+                return;
+            }
+
+            // Store scene in navigation history for back button functionality
+            if (navigationHistory.length === 0 || navigationHistory[navigationHistory.length - 1] !== currentScene) {
+                navigationHistory.push(currentScene);
+                if (navigationHistory.length > 10) navigationHistory.shift(); // Keep only last 10 scenes
+            }
+
+            // Check for special item combinations that might change the scene
+            const combinationScene = checkItemCombinations();
+            if (combinationScene) {
+                logDebug(`Item combination found! Redirecting to: ${combinationScene}`);
+                currentScene = combinationScene;
+            }
+
+            const scene = story[currentScene];
+
+            if (!scene) {
+                console.error(`Error: Scene ID "${currentScene}" not found in story data. Resetting to start.`);
+                storyTextElement.innerHTML = `Error: Scene "${currentScene}" could not be found. This is a bug! Returning to the start.`;
+                currentScene = 'start';
+                inventory = [];
+                updateInventoryDisplay();
+                setTimeout(() => renderScene(), 0); 
+                return;
+            }
+            logDebug(`Scene loaded: ${currentScene} (${scene.text.substring(0, 30)}...)`);
+
+            storyTextElement.innerHTML = scene.text;
+            choicesContainerElement.innerHTML = "";
+
+            if (scene.item && !inventory.includes(scene.item)) {
+                inventory.push(scene.item);
+                showMessage(`You found: ${scene.item}!`);
+                updateInventoryDisplay();
+                logDebug(`Added item to inventory: ${scene.item}`);
+            }
+
+            if (scene.removeItem) { 
+                const itemIndex = inventory.indexOf(scene.removeItem);
+                if (itemIndex > -1) {
+                    inventory.splice(itemIndex, 1);
+                    showMessage(`You used your ${scene.removeItem}.`);
+                    updateInventoryDisplay();
+                    logDebug(`Removed item from inventory: ${scene.removeItem}`);
+                } else if (scene.removeItem) { 
+                    console.warn(`Attempted to remove item "${scene.removeItem}" but it was not in inventory.`);
+                    logDebug(`Warning: Tried to remove missing item: ${scene.removeItem}`);
+                }
+            }
+
+            if (scene.consequenceText) {
+                 showMessage(scene.consequenceText, 4000);
+            }
+
+            // Add a back button in most scenes (except start and special scenes)
+            if (navigationHistory.length > 1 && 
+                currentScene !== 'start' && 
+                !scene.consequence && 
+                !currentScene.startsWith('ending_')) {
+                
+                const backButton = document.createElement('button');
+                backButton.textContent = "« Go Back";
+                backButton.classList.add('choice-button');
+                backButton.style.backgroundColor = '#555';
+                backButton.style.marginBottom = '15px';
+                
+                backButton.onclick = () => {
+                    navigationHistory.pop(); // Remove current scene
+                    const previousScene = navigationHistory.pop(); // Get and remove previous scene
+                    if (previousScene) {
+                        currentScene = previousScene;
+                        renderScene();
+                    } else {
+                        // If somehow we don't have a previous scene, go to adventure hub
+                        currentScene = 'adventure_hub';
+                        renderScene();
+                    }
+                };
+                
+                choicesContainerElement.appendChild(backButton);
+            }
+
+            // Always add an "Adventure Map" button in most scenes
+            if (currentScene !== 'start' && !scene.consequence && !currentScene.startsWith('ending_')) {
+                const mapButton = document.createElement('button');
+                mapButton.textContent = "🗺️ Adventure Map";
+                mapButton.classList.add('choice-button');
+                mapButton.style.backgroundColor = '#2a5415';
+                mapButton.style.marginBottom = '15px';
+                
+                mapButton.onclick = () => {
+                    // Store current scene for returning
+                    const returnScene = currentScene;
+                    
+                    // Go to adventure hub
+                    currentScene = 'adventure_hub';
+                    renderScene();
+                    
+                    // Add a "Return to where you were" button
+                    const returnButton = document.createElement('button');
+                    returnButton.textContent = `Return to where you were`;
+                    returnButton.classList.add('choice-button');
+                    returnButton.style.backgroundColor = '#6a0dad';
+                    returnButton.style.marginTop = '15px';
+                    
+                    returnButton.onclick = () => {
+                        currentScene = returnScene;
+                        renderScene();
+                    };
+                    
+                    choicesContainerElement.appendChild(returnButton);
+                };
+                
+                choicesContainerElement.appendChild(mapButton);
+            }
+
+            if (scene.choices && scene.choices.length > 0) {
+                scene.choices.forEach(choice => {
+                    if (choice.requires && !inventory.includes(choice.requires)) {
+                        return;
+                    }
+
+                    const button = document.createElement('button');
+                    button.textContent = choice.text;
+                    button.classList.add('choice-button');
+                    
+                    button.onclick = () => {
+                        if (choice.isRestart) {
+                            inventory = [];
+                            navigationHistory = [];
+                            updateInventoryDisplay();
+                            showMessage("A new adventure begins!");
+                            logDebug("Game restarted");
+                        }
+                        currentScene = choice.nextScene;
+                        renderScene();
+                    };
+                    choicesContainerElement.appendChild(button);
+                });
+                
+                // Check if we actually created any buttons for choices
+                const hasChoiceButtons = Array.from(choicesContainerElement.children).some(
+                    button => !button.textContent.includes("Go Back") && !button.textContent.includes("Adventure Map")
+                );
+                
+                if (!hasChoiceButtons) {
+                    logDebug("Warning: No choices were rendered (requirements not met?)");
+                    const button = document.createElement('button');
+                    button.textContent = "No available actions. Return to exploration.";
+                    button.classList.add('choice-button');
+                    button.onclick = () => {
+                        // Move to adventure hub which has access to all main areas
+                        currentScene = 'adventure_hub';
+                        renderScene();
+                    };
+                    choicesContainerElement.appendChild(button);
+                }
+                
+            } else if (!scene.consequence) {
+                console.warn(`Scene "${currentScene}" has no choices and no explicit consequence. Adding a fallback to adventure hub.`);
+                logDebug(`Warning: Scene lacks choices: ${currentScene}`);
+                const button = document.createElement('button');
+                button.textContent = "Continue your adventure";
+                button.classList.add('choice-button');
+                button.onclick = () => {
+                    currentScene = 'adventure_hub';
+                    renderScene();
+                };
+                choicesContainerElement.appendChild(button);
+            }
+        }
+
+        // --- Game Initialization ---
+        window.onload = () => {
+            console.log("window.onload event triggered.");
+
+            storyTextElement = document.getElementById('story-text');
+            choicesContainerElement = document.getElementById('choices-container');
+            inventoryElement = document.getElementById('inventory');
+            inventoryItemsElement = document.getElementById('inventory-items');
+            messageBoxElement = document.getElementById('message-box');
+            debugPanelElement = document.getElementById('debug-panel');
+
+            // Toggle debug panel visibility based on debug mode
+            if (debugPanelElement) {
+                debugPanelElement.style.display = DEBUG_MODE ? 'block' : 'none';
+            }
+
+            console.log("DOM elements references initialized:", {
+                storyTextElement: !!storyTextElement,
+                choicesContainerElement: !!choicesContainerElement,
+                inventoryElement: !!inventoryElement,
+                inventoryItemsElement: !!inventoryItemsElement,
+                messageBoxElement: !!messageBoxElement,
+                debugPanelElement: !!debugPanelElement
+            });
+
+            if (!storyTextElement || !choicesContainerElement || !inventoryElement || !inventoryItemsElement || !messageBoxElement) {
+                console.error("One or more critical DOM elements were not found. Game cannot start.");
+                const errorDiv = "<div style='color: red; text-align: center; padding-top: 50px; font-size: 1.2em; font-family: sans-serif;'>A critical error occurred loading the game. Some essential parts of the page are missing. Please ensure the HTML structure is correct (especially elements with IDs like 'story-text', 'choices-container', etc.). Check the browser console (Right-click -> Inspect -> Console) for more details.</div>";
+                // Try to set body, but if even that fails, there's little we can do.
+                if (document.body) {
+                    document.body.innerHTML = errorDiv;
+                } else {
+                    // Fallback if body isn't even available, though highly unlikely for a valid HTML doc
+                    alert("Critical error: Game cannot load. Essential HTML structure missing.");
+                }
+                return; 
+            }
+            
+            console.log("Game loading. Initial scene ID:", currentScene);
+            try {
+                renderScene();
+                updateInventoryDisplay();
+                console.log("Initial scene rendered.");
+                
+                // Add keyboard shortcuts for testing 
+                if (DEBUG_MODE) {
+                    window.addEventListener('keydown', function(e) {
+                        if (e.key === 'i') {
+                            // Debug inventory - add all key items
+                            inventory = ["Silver Flute", "Coral Flute", "Faerie Bell", "Ocean Tear Pendant", "Songpearl", "Clover Amulet", "Druidic Knowledge", "Silver Key", "Sea Blessing", "Selkie Shell", "Treasure Map"];
+                            updateInventoryDisplay();
+                            showMessage("DEBUG: Added all key items to inventory", 2000);
+                            logDebug("DEBUG: Added all key items to inventory");
+                        } else if (e.key === 'c') {
+                            // Jump to the cave entrance
+                            currentScene = "cave_entrance";
+                            renderScene();
+                            logDebug("DEBUG: Jumped to cave entrance");
+                        } else if (e.key === 's') {
+                            // Skip to final scene
+                            currentScene = "ending_mastery";
+                            renderScene();
+                            logDebug("DEBUG: Jumped to ending");
+                        } else if (e.key === 'r') {
+                            // Reset
+                            currentScene = "start";
+                            inventory = [];
+                            navigationHistory = [];
+                            updateInventoryDisplay();
+                            renderScene();
+                            logDebug("DEBUG: Reset game");
+                        } else if (e.key === 'h') {
+                            // Go to hub
+                            currentScene = "adventure_hub";
+                            renderScene();
+                            logDebug("DEBUG: Went to adventure hub");
+                        }
+                    });
+                }
+                
+            } catch (e) {
+                console.error("Error during initial renderScene or updateInventoryDisplay:", e);
+                if (storyTextElement) { // Check if storyTextElement is available before using it
+                    storyTextElement.innerHTML = `An error occurred while starting the game: ${e.message}. Check the console for more details.`;
+                } else {
+                    // If storyTextElement itself is the problem or not available
+                    document.body.insertAdjacentHTML('beforeend', `<div style='color:red; padding:10px;'>Runtime Error: ${e.message}</div>`);
+                }
+            }
+        };
+        console.log("Script execution finished defining functions and onload handler.");
+    </script>
+</body>
+</html> woods ain't always friendly to outsiders. Stick to the paths, and don't meddle with things that ain't yours.'",
                 choices: [
                     { text: "Thank him and continue on the path", nextScene: "deep_woods" },
                     { text: "Ask about the 'unfriendly' parts", nextScene: "leprechaun_warns" }
