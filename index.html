@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emerald Isle Adventure</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lusitana:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
     <style>
         body {
@@ -102,6 +102,22 @@
             display: none;
             font-size: 0.9rem;
         }
+        .debug-panel {
+            display: none;
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            max-width: 300px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
         @media (max-width: 600px) {
             .game-title { font-size: 2.2rem; }
             .story-text { font-size: 1rem; }
@@ -121,8 +137,12 @@
         </div>
     </div>
     <div id="message-box" class="message-box">This is a message!</div>
+    <div id="debug-panel" class="debug-panel"></div>
 
     <script>
+        // Enable debug mode (set to true during development, false for production)
+        const DEBUG_MODE = false;
+        
         console.log("Script execution started."); // First log
 
         // Story data structure
@@ -1255,6 +1275,7 @@
         // === ENHANCED WATERFALL AND MULTIPLE ENDINGS ===
         cave_entrance: {
             text: "The cave is damp and echoes with the waterfall's roar. A pedestal stands in the center. Upon it rests a legendary artifact: The Harp of Ages, said to hold the music of the land itself. But as you approach, a shimmer appears in the air—a barrier of magic.",
+            // Custom logic for combination choices handled in renderScene() function
             choices: [
                 { text: "Test the barrier with your hand", nextScene: "barrier_test" },
                 { text: "Play the Silver Flute (if you have it)", nextScene: "flute_barrier", requires: "Silver Flute" },
@@ -1482,14 +1503,29 @@
         // --- Global Game State ---
         let currentScene = 'start';
         let inventory = [];
+        let debugLog = [];
 
         // --- DOM Element References ---
         // These will be assigned once the DOM is loaded, inside window.onload
-        let storyTextElement, choicesContainerElement, inventoryElement, inventoryItemsElement, messageBoxElement;
+        let storyTextElement, choicesContainerElement, inventoryElement, inventoryItemsElement, messageBoxElement, debugPanelElement;
 
         console.log("Global variables declared.");
 
         // --- Core Functions ---
+        function logDebug(message) {
+            if (!DEBUG_MODE) return;
+            
+            debugLog.push(`${new Date().toISOString().substr(11, 8)}: ${message}`);
+            if (debugLog.length > 20) debugLog.shift(); // Keep only last 20 entries
+            
+            if (debugPanelElement) {
+                debugPanelElement.innerHTML = debugLog.join('<br>');
+                debugPanelElement.style.display = 'block';
+            }
+            
+            console.log(`[DEBUG] ${message}`);
+        }
+
         function showMessage(message, duration = 3000) {
             if (!messageBoxElement) { // Guard clause
                 console.error("showMessage called before messageBoxElement is initialized.");
@@ -1516,8 +1552,65 @@
             }
         }
 
+        // This is the new function to check for item combinations
+        function checkItemCombinations() {
+            logDebug("Checking for item combinations...");
+            
+            // For cave_entrance scene, check for special item combinations
+            if (currentScene === "cave_entrance") {
+                logDebug(`Current inventory: ${inventory.join(", ")}`);
+                
+                // Check for different combinations of items
+                const hasFlute = inventory.includes("Silver Flute");
+                const hasCoralFlute = inventory.includes("Coral Flute");
+                const hasBell = inventory.includes("Faerie Bell");
+                const hasPendant = inventory.includes("Ocean Tear Pendant");
+                const hasSongpearl = inventory.includes("Songpearl");
+                const hasAmulet = inventory.includes("Clover Amulet");
+                const hasDruidicKnowledge = inventory.includes("Druidic Knowledge");
+                
+                // Check for the most powerful combination first - the "druid blessing"
+                if (hasDruidicKnowledge && hasAmulet && hasBell) {
+                    logDebug("Found druid blessing combination!");
+                    return "druid_blessing_approach";
+                }
+                
+                // Check for triple item combination (any 3 or more items would qualify)
+                const magicalItemCount = [hasFlute, hasCoralFlute, hasBell, hasPendant, hasSongpearl, hasAmulet].filter(Boolean).length;
+                if (magicalItemCount >= 3) {
+                    logDebug("Found triple item combination!");
+                    return "triple_item_approach";
+                }
+                
+                // Check for specific dual combinations
+                if (hasFlute && hasBell) {
+                    logDebug("Found flute + bell combination!");
+                    return "flute_bell_combo";
+                }
+                
+                if (hasCoralFlute && hasPendant) {
+                    logDebug("Found coral flute + pendant combination!");
+                    return "coral_pendant_combo";
+                }
+                
+                if (hasSongpearl && hasPendant) {
+                    logDebug("Found songpearl + pendant combination!");
+                    return "songpearl_pendant_combo";
+                }
+                
+                if (hasAmulet && hasBell) {
+                    logDebug("Found amulet + bell combination!");
+                    return "amulet_bell_combo";
+                }
+            }
+            
+            // No special combination found
+            return null;
+        }
+
         function renderScene() {
-            console.log(`Attempting to render scene: ${currentScene}`);
+            logDebug(`Rendering scene: ${currentScene}`);
+            
             if (!storyTextElement || !choicesContainerElement) { // Guard clause
                 console.error("renderScene called before essential DOM elements are initialized.");
                 // Check if storyTextElement itself is null before trying to set its innerHTML
@@ -1528,6 +1621,13 @@
                      document.body.insertAdjacentHTML('afterbegin', '<div style="color:red; padding: 20px; text-align:center;">Critical Error: Game display area not found.</div>');
                 }
                 return;
+            }
+
+            // Check for special item combinations that might change the scene
+            const combinationScene = checkItemCombinations();
+            if (combinationScene) {
+                logDebug(`Item combination found! Redirecting to: ${combinationScene}`);
+                currentScene = combinationScene;
             }
 
             const scene = story[currentScene];
@@ -1541,7 +1641,7 @@
                 setTimeout(() => renderScene(), 0); 
                 return;
             }
-            console.log("Scene data:", scene);
+            logDebug(`Scene loaded: ${currentScene} (${scene.text.substring(0, 30)}...)`);
 
             storyTextElement.innerHTML = scene.text;
             choicesContainerElement.innerHTML = "";
@@ -1550,6 +1650,7 @@
                 inventory.push(scene.item);
                 showMessage(`You found: ${scene.item}!`);
                 updateInventoryDisplay();
+                logDebug(`Added item to inventory: ${scene.item}`);
             }
 
             if (scene.removeItem) { 
@@ -1558,8 +1659,10 @@
                     inventory.splice(itemIndex, 1);
                     showMessage(`You used your ${scene.removeItem}.`);
                     updateInventoryDisplay();
+                    logDebug(`Removed item from inventory: ${scene.removeItem}`);
                 } else if (scene.removeItem) { 
                     console.warn(`Attempted to remove item "${scene.removeItem}" but it was not in inventory.`);
+                    logDebug(`Warning: Tried to remove missing item: ${scene.removeItem}`);
                 }
             }
 
@@ -1582,14 +1685,31 @@
                             inventory = [];
                             updateInventoryDisplay();
                             showMessage("A new adventure begins!");
+                            logDebug("Game restarted");
                         }
                         currentScene = choice.nextScene;
                         renderScene();
                     };
                     choicesContainerElement.appendChild(button);
                 });
+                
+                // Check if we actually created any buttons
+                if (choicesContainerElement.children.length === 0) {
+                    logDebug("Warning: No choices were rendered (requirements not met?)");
+                    const button = document.createElement('button');
+                    button.textContent = "No available actions. Return to previous area.";
+                    button.classList.add('choice-button');
+                    button.onclick = () => {
+                        // Move back to the last scene or start if we can't determine it
+                        currentScene = 'final_path_waterfall';
+                        renderScene();
+                    };
+                    choicesContainerElement.appendChild(button);
+                }
+                
             } else if (!scene.consequence) {
                 console.warn(`Scene "${currentScene}" has no choices and no explicit consequence. Adding a fallback to start.`);
+                logDebug(`Warning: Scene lacks choices: ${currentScene}`);
                 const button = document.createElement('button');
                 button.textContent = "Hmm, where to go now? (Return to start)";
                 button.classList.add('choice-button');
@@ -1612,13 +1732,20 @@
             inventoryElement = document.getElementById('inventory');
             inventoryItemsElement = document.getElementById('inventory-items');
             messageBoxElement = document.getElementById('message-box');
+            debugPanelElement = document.getElementById('debug-panel');
+
+            // Toggle debug panel visibility based on debug mode
+            if (debugPanelElement) {
+                debugPanelElement.style.display = DEBUG_MODE ? 'block' : 'none';
+            }
 
             console.log("DOM elements references initialized:", {
                 storyTextElement: !!storyTextElement,
                 choicesContainerElement: !!choicesContainerElement,
                 inventoryElement: !!inventoryElement,
                 inventoryItemsElement: !!inventoryItemsElement,
-                messageBoxElement: !!messageBoxElement
+                messageBoxElement: !!messageBoxElement,
+                debugPanelElement: !!debugPanelElement
             });
 
             if (!storyTextElement || !choicesContainerElement || !inventoryElement || !inventoryItemsElement || !messageBoxElement) {
@@ -1639,6 +1766,37 @@
                 renderScene();
                 updateInventoryDisplay();
                 console.log("Initial scene rendered.");
+                
+                // Add keyboard shortcuts for testing 
+                if (DEBUG_MODE) {
+                    window.addEventListener('keydown', function(e) {
+                        if (e.key === 'i') {
+                            // Debug inventory - add all key items
+                            inventory = ["Silver Flute", "Coral Flute", "Faerie Bell", "Ocean Tear Pendant", "Songpearl", "Clover Amulet", "Druidic Knowledge"];
+                            updateInventoryDisplay();
+                            showMessage("DEBUG: Added all key items to inventory", 2000);
+                            logDebug("DEBUG: Added all key items to inventory");
+                        } else if (e.key === 'c') {
+                            // Jump to the cave entrance
+                            currentScene = "cave_entrance";
+                            renderScene();
+                            logDebug("DEBUG: Jumped to cave entrance");
+                        } else if (e.key === 's') {
+                            // Skip to final scene
+                            currentScene = "ending_mastery";
+                            renderScene();
+                            logDebug("DEBUG: Jumped to ending");
+                        } else if (e.key === 'r') {
+                            // Reset
+                            currentScene = "start";
+                            inventory = [];
+                            updateInventoryDisplay();
+                            renderScene();
+                            logDebug("DEBUG: Reset game");
+                        }
+                    });
+                }
+                
             } catch (e) {
                 console.error("Error during initial renderScene or updateInventoryDisplay:", e);
                 if (storyTextElement) { // Check if storyTextElement is available before using it
@@ -1653,5 +1811,3 @@
     </script>
 </body>
 </html>
-
-            
